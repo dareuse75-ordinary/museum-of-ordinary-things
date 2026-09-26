@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum of Ordinary Things</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --panel-dark: #181818;
+            --gold-accent: #c5a059;
+            --text-light: #e0e0e0;
+            --text-muted: #888888;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #222;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background-color: var(--bg-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--gold-accent);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-accent);
+        }
+
+        /* Main Split Layout */
+        .main-container {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+
+        @media (min-width: 900px) {
+            .main-container {
+                flex-direction: row;
+            }
+        }
+
+        /* Left Side: Image Showcase */
+        .image-section {
+            flex: 1.2;
+            background-color: #0b0b0b;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+            min-height: 350px;
+        }
+
+        .image-section img {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border-radius: 2px;
+        }
+
+        .image-controls {
+            position: absolute;
+            bottom: 1rem;
+            display: flex;
+            gap: 2rem;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        .image-controls span {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .image-controls span:hover {
+            color: var(--gold-accent);
+        }
+
+        /* Right Side: Artifact Details */
+        .details-section {
+            flex: 1;
+            background-color: var(--panel-dark);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px solid #222;
+        }
+
+        .artifact-number {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .artifact-title {
+            font-size: 2rem;
+            margin: 0 0 1.5rem 0;
+            font-weight: normal;
+            line-height: 1.2;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            row-gap: 0.75rem;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 1.5rem;
+        }
+
+        .meta-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            align-self: center;
+        }
+
+        .meta-value {
+            color: var(--text-light);
+        }
+
+        .story-heading {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .story-text {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .museum-notes {
+            margin-top: 1.5rem;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 1.2rem;
+        }
+
+        .museum-notes h4 {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            margin: 0 0 0.4rem 0;
+        }
+
+        .museum-notes p {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Menu -->
+    <nav>
+        <div class="logo">MUSEUM OF ORDINARY THINGS</div>
+        <div class="nav-links">
+            <a href="#" style="color: var(--gold-accent);">EXHIBIT01</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Layout -->
+    <div class="main-container">
+        
+        <!-- Left Side: Image & Controls -->
+        <div class="image-section">
+            <!-- Dito tinatawag ang bagong pangalan ng larawan na fan.jpg -->
+            <img src="fan.jpg" alt="Ang Paypay ng Baler">
+            <div class="image-controls">
+                <span>&lang; PREV</span>
+                <span>001 / 100</span>
+                <span>NEXT &rang;</span>
+            </div>
+        </div>
+
+        <!-- Right Side: Artifact Details -->
+        <div class="details-section">
+            <div class="artifact-number">ARTIFACT #001</div>
+            <h1 class="artifact-title">Ang Paypay ng Baler na May Maluwag na Turnilyo</h1>
+
+            <div class="meta-grid">
+                <div class="meta-label">DATE</div>
+                <div class="meta-value">Circa Panahon ng Tag-init</div>
+                
+                <div class="meta-label">ORIGIN</div>
+                <div class="meta-value">Ika-sampung hilera ng mga pasalubong</div>
+                
+                <div class="meta-label">MATERIALS</div>
+                <div class="meta-value">Kahoy, Tela na may Bulaklak, at Turnilyong Maluwag</div>
+                
+                <div class="meta-label">DIMENSIONS</div>
+                <div class="meta-value">Humigit-kumulang 30 x 15 x 2 cm</div>
+                
+                <div class="meta-label">OWNER</div>
+                <div class="meta-value">Anonymous na Napilitang Bumili</div>
+            </div>
+
+            <div class="story-heading">THE STORY</div>
+            <div class="story-text">
+                Ang paypay na ito ay nakaligtas sa matinding alinsangan ng panahon, maalikabok na biyahe sa bus, at mga kwentong hindi mo naman itinanong. Dinala nito ang may-ari sa mga sandali ng matinding pagpapawis.<br><br>
+                Ang pagpalya ng pagbukas nito ay hindi depekto—ito ay patunay ng buhay na naranasan. Hindi ito kailanman ang pinakamahal na paypay sa buong mundo, ngunit ito ang nag-iisang nag-iwan ng pilat sa iyong daliri.
+            </div>
+
+            <div class="museum-notes">
+                <h4>MUSEUM NOTES</h4>
+                <p>Isang kasangkapan ng pagpapalamig na sadyang sumusubok sa pasensya ng gumagamit sa gitna ng init ng tanghali.</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
