@@ -206,7 +206,7 @@
         <!-- Kanang Bahagi: Detalye at Kwento -->
         <div class="right-panel">
             <div id="art-id" class="artifact-id">ARTIFACT #01</div>
-            <h1 id="art-title" class="artifact-title">Exhibit 01</h1>
+            <h1 id="art-title" class="artifact-title">Ang Paypay ng Tag-init</h1>
 
             <div class="metadata-grid">
                 <div class="meta-label">Date</div>
@@ -242,7 +242,7 @@
         const exhibits = [
             {
                 id: "ARTIFACT #01",
-                title: "Exhibit 01",
+                title: "Ang Paypay ng Tag-init",
                 date: "Circa 2015",
                 origin: "Baler, Aurora",
                 materials: "Bamboo, Fabric, Paper",
@@ -254,7 +254,7 @@
             },
             {
                 id: "ARTIFACT #02",
-                title: "Exhibit 02",
+                title: "Ang Kamot-Likod",
                 date: "Circa 2018",
                 origin: "Tapat ng Salamin sa Kwarto",
                 materials: "Kahoy at Metal",
@@ -271,7 +271,7 @@
         function updateExhibit() {
             const current = exhibits[currentIndex];
             
-            // Naghahanap ng larawan na may pormat na "Exhibit 01.jpg", "Exhibit 02.jpg", atbp.
+            // Tugma na sa "Exhibit 01.jpg", "Exhibit 02.jpg"
             const imgFilename = "Exhibit 0" + (currentIndex + 1) + ".jpg";
 
             document.getElementById("exhibit-img").src = imgFilename;
