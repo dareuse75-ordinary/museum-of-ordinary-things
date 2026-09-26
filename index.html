@@ -6,116 +6,276 @@
     <title>Museum of Ordinary Things</title>
     <style>
         body {
-            background-color: #0d0d0d;
-            color: #e6dfd5;
+            background-color: #0c0b0a;
+            color: #d6cfc7;
             font-family: serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+            border-bottom: 1px solid #1a1917;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+        .logo {
+            font-weight: normal;
+            letter-spacing: 3px;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+        .nav-menu span, .menu-btn {
+            color: #a8a095;
+            cursor: pointer;
+        }
+        .nav-menu span:hover {
+            color: #d6cfc7;
+        }
+        
+        .museum-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Left Side: Image & Navigation */
+        .left-panel {
+            background-color: #121110;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            padding: 40px;
+            position: relative;
+            border-right: 1px solid #1a1917;
         }
-        .exhibit-header {
-            display: flex;
-            justify-content: space-between;
+        .image-wrapper {
             width: 100%;
-            max-width: 600px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .image-container {
-            width: 100%;
-            max-width: 600px;
+            max-width: 550px;
             text-align: center;
-            margin-bottom: 20px;
         }
-        .image-container img {
+        .image-wrapper img {
             width: 100%;
             height: auto;
-            border-radius: 4px;
+            border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .nav-links {
+        .image-nav {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            max-width: 550px;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: #8c857b;
         }
-        .nav-links button {
+        .image-nav button {
             background: none;
             border: none;
-            color: #e6dfd5;
+            color: #d6cfc7;
             font-family: serif;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
             cursor: pointer;
             padding: 0;
         }
-        .nav-links button:hover:not(:disabled) {
+        .image-nav button:hover:not(:disabled) {
             color: #d4af37;
         }
-        .nav-links button:disabled {
-            color: #444;
+        .image-nav button:disabled {
+            color: #383531;
             cursor: default;
         }
-        .description {
-            width: 100%;
-            max-width: 600px;
-            border-top: 1px solid #333;
-            padding-top: 20px;
+
+        /* Right Side: Details & Story */
+        .right-panel {
+            padding: 60px 50px;
+            overflow-y: auto;
+            max-height: calc(100vh - 80px);
+        }
+        .artifact-id {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: #a8a095;
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
         .artifact-title {
-            color: #d4af37;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: normal;
+            line-height: 1.2;
+            color: #e8e2d8;
+            margin-bottom: 35px;
+            font-family: serif;
         }
-        .artifact-desc {
-            font-size: 1.8rem;
-            line-height: 1.3;
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            row-gap: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #1f1d1a;
+        }
+        .meta-label {
+            color: #8c857b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        .meta-value {
+            color: #d6cfc7;
+        }
+
+        .section-heading {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #a8a095;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .story-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #1f1d1a;
+        }
+        .story-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #c5bdb2;
+            margin-bottom: 15px;
+        }
+        .museum-notes-section {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #a8a095;
+            font-style: italic;
+        }
+
+        /* Responsive para sa Mobile */
+        @media (max-width: 900px) {
+            .museum-container {
+                grid-template-columns: 1fr;
+            }
+            header {
+                padding: 20px;
+            }
+            .nav-menu {
+                display: none;
+            }
+            .right-panel {
+                padding: 30px 20px;
+                max-height: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="exhibit-header">
-        <span>MUSEUM OF ORDINARY THINGS</span>
-        <span id="exhibit-num" style="color: #d4af37;"></span>
-    </div>
+    <header>
+        <div class="logo">MUSEUM OF ORDINARY THINGS</div>
+        <div class="nav-menu">
+            <span>EXHIBITIONS</span>
+            <span>ARTIFACTS</span>
+            <span>ABOUT</span>
+            <span>DONATE AN ARTIFACT</span>
+        </div>
+        <div class="menu-btn">MENU ≡</div>
+    </header>
 
-    <div class="image-container">
-        <img id="exhibit-img" src="" alt="Exhibit Image">
-    </div>
+    <div class="museum-container">
+        <!-- Kaliwang Bahagi: Larawan at Nav -->
+        <div class="left-panel">
+            <div class="image-wrapper">
+                <img id="exhibit-img" src="" alt="Artifact Image">
+            </div>
+            <div class="image-nav">
+                <button id="prev-btn" onclick="changeExhibit(-1)">&lang; PREV</button>
+                <span id="counter">01 / 02</span>
+                <button id="next-btn" onclick="changeExhibit(1)">NEXT &rang;</button>
+            </div>
+        </div>
 
-    <div class="nav-links">
-        <button id="prev-btn" onclick="changeExhibit(-1)">&langk; PREV</button>
-        <span id="counter"></span>
-        <button id="next-btn" onclick="changeExhibit(1)">NEXT &rang;</button>
-    </div>
+        <!-- Kanang Bahagi: Detalye at Kwento -->
+        <div class="right-panel">
+            <div id="art-id" class="artifact-id">ARTIFACT #01</div>
+            <h1 id="art-title" class="artifact-title">Ang Paypay ng Baler</h1>
 
-    <div class="description">
-        <div id="artifact-id" class="artifact-title"></div>
-        <div id="artifact-desc" class="artifact-desc"></div>
+            <div class="metadata-grid">
+                <div class="meta-label">Date</div>
+                <div id="meta-date" class="meta-value">Circa 2015</div>
+
+                <div class="meta-label">Origin</div>
+                <div id="meta-origin" class="meta-value">Baler, Aurora</div>
+
+                <div class="meta-label">Materials</div>
+                <div id="meta-materials" class="meta-value">Bamboo, Fabric, Paper</div>
+
+                <div class="meta-label">Dimensions</div>
+                <div id="meta-dimensions" class="meta-value">Approx. 35 x 20 cm</div>
+
+                <div class="meta-label">Owner</div>
+                <div id="meta-owner" class="meta-value">Lokal na Manlalakbay</div>
+            </div>
+
+            <div class="story-section">
+                <div class="section-heading">The Story</div>
+                <div id="art-story-1" class="story-text"></div>
+                <div id="art-story-2" class="story-text"></div>
+            </div>
+
+            <div class="museum-notes-section">
+                <div class="section-heading">Museum Notes</div>
+                <div id="art-notes"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Dito mo lang idadagdag ang mga susunod na item sa madaling paraan!
         const exhibits = [
             {
-                img: "exhibit01.jpg",
-                desc: "Ang Paypay ng Baler na May Maluwag na..."
+                id: "ARTIFACT #01",
+                title: "Ang Paypay ng Baler",
+                date: "Circa 2015",
+                origin: "Baler, Aurora",
+                materials: "Bamboo, Fabric, Paper",
+                dimensions: "Approx. 35 x 20 cm",
+                owner: "Lokal na Manlalakbay",
+                story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente, mainit na hapon sa tabi ng dagat, at mga kwentuhan sa ilalim ng punong mangga.",
+                story2: "Hindi ito ang pinakamahalagang kagamitan sa bahay. Pero ito ang laging sumasalo sa init ng panahon nang walang reklamo.",
+                notes: "Isang ordinaryong sandata laban sa init na nakasaksi ng mga tahimik na sandali ng pamilya."
             },
             {
-                img: "exhibit02.jpg",
-                desc: "Pangalawang Artifact sa Museo"
+                id: "ARTIFACT #02",
+                title: "Ang Pangkamot sa Likod",
+                date: "Circa 2018",
+                origin: "Tapat ng Salamin sa Kwarto",
+                materials: "Kahoy at Metal",
+                dimensions: "Approx. 45 x 3 cm",
+                owner: "Anonymous Curator",
+                story1: "Ang mahiwagang kasangkapang ito ay tumutugon sa mga makakati at mahirap abutin na bahagi ng katawan na hindi kayang abutin ng sariling mga kamay.",
+                story2: "Sa mga sandaling mag-isa ka at nanginginig sa kati ng likod, ito ang nagbibigay ng agarang ginhawa at tagumpay.",
+                notes: "Isang simpleng sandata para sa malalim at mahirap abutin na pangangati."
             }
-            // Pag magdaragdag ka ng exhibit03, ganito lang kasimple ang idagdag sa ibaba:
+            // Dito mo idadagdag ang pangatlo sa susunod:
             // {
-            //     img: "exhibit03.jpg",
-            //     desc: "Ikatlong kwento ng artifact..."
+            //     id: "ARTIFACT #03",
+            //     title: "Pangatlong Item",
+            //     date: "2026",
+            //     origin: "Saan nagmula",
+            //     materials: "Materyales",
+            //     dimensions: "Sukat",
+            //     owner: "May-ari",
+            //     story1: "Unang talata...",
+            //     story2: "Pangalawang talata...",
+            //     notes: "Tala..."
             // }
         ];
 
@@ -123,14 +283,25 @@
 
         function updateExhibit() {
             const current = exhibits[currentIndex];
-            const numStr = String(currentIndex + 1).padStart(2, '0');
-            const totalStr = String(exhibits.length).padStart(2, '0');
+            
+            // Pagtatapat ng larawan: exhibit01.jpg at exhibit02.jpg
+            const imgFilename = "exhibit0" + (currentIndex + 1) + ".jpg";
 
-            document.getElementById("exhibit-num").innerText = "EXHIBIT" + numStr;
-            document.getElementById("exhibit-img").src = current.img;
-            document.getElementById("artifact-id").innerText = "ARTIFACT #" + numStr;
-            document.getElementById("artifact-desc").innerText = current.desc;
-            document.getElementById("counter",).innerText = numStr + " / " + totalStr;
+            document.getElementById("exhibit-img").src = imgFilename;
+            document.getElementById("art-id").innerText = current.id;
+            document.getElementById("art-title").innerText = current.title;
+            document.getElementById("meta-date").innerText = current.date;
+            document.getElementById("meta-origin").innerText = current.origin;
+            document.getElementById("meta-materials").innerText = current.materials;
+            document.getElementById("meta-dimensions").innerText = current.dimensions;
+            document.getElementById("meta-owner").innerText = current.owner;
+            document.getElementById("art-story-1").innerText = current.story1;
+            document.getElementById("art-story-2").innerText = current.story2;
+            document.getElementById("art-notes").innerText = current.notes;
+            
+            const numStr = String(currentIndex + 1).padStart(3, '0');
+            const totalStr = String(exhibits.length).padStart(3, '0');
+            document.getElementById("counter").innerText = numStr + " / " + totalStr;
 
             document.getElementById("prev-btn").disabled = currentIndex === 0;
             document.getElementById("next-btn").disabled = currentIndex === exhibits.length - 1;
