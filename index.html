@@ -198,7 +198,7 @@
             </div>
             <div class="image-nav">
                 <button id="prev-btn" onclick="changeExhibit(-1)">&lang; PREV</button>
-                <span id="counter">01 / 02</span>
+                <span id="counter">01 / 03</span>
                 <button id="next-btn" onclick="changeExhibit(1)">NEXT &rang;</button>
             </div>
         </div>
@@ -263,6 +263,18 @@
                 story1: "Ang mahiwagang kasangkapang ito ay tumutugon sa mga makakati at mahirap abutin na bahagi ng katawan na hindi kayang abutin ng sariling mga kamay.",
                 story2: "Sa mga sandaling mag-isa ka at nanginginig sa kati ng likod, ito ang nagbibigay ng agarang ginhawa at tagumpay.",
                 notes: "Isang simpleng sandata para sa malalim at mahirap abutin na pangangati."
+            },
+            {
+                id: "ARTIFACT #03",
+                title: "Ang Tasang Tagapagtanggol sa Antok",
+                date: "Circa 2021",
+                origin: "Gilid ng Laptop na Puno ng Alikabok",
+                materials: "Ceramic na may bahid ng kape at pangarap",
+                dimensions: "Approx. 10 x 8 cm",
+                owner: "Taong Laging Overdue sa Deadlines",
+                story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat hanggang alas-tres ng umaga para lang manood ng random reels sa TikTok.",
+                story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction, kung saan ang laman ay kalahating kape, kalahating tubig, at 99% na existential dread para sa kinabukasan.",
+                notes: "Babala: Huwag na huwag mong aamuyin ang ilalim nito kapag nakalimutan mong hugasan nang tatlong araw—may sarili na itong ecosystem."
             }
         ];
 
@@ -271,7 +283,6 @@
         function updateExhibit() {
             const current = exhibits[currentIndex];
             
-            // Tugma na sa "Exhibit 01.jpg", "Exhibit 02.jpg"
             const imgFilename = "Exhibit 0" + (currentIndex + 1) + ".jpg";
 
             document.getElementById("exhibit-img").src = imgFilename;
