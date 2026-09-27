@@ -24,19 +24,21 @@
         .logo {
             font-weight: normal;
             letter-spacing: 3px;
+            cursor: pointer;
         }
         .nav-menu {
             display: flex;
             gap: 30px;
         }
-        .nav-menu span, .menu-btn {
+        .nav-menu span {
             color: #a8a095;
             cursor: pointer;
         }
-        .nav-menu span:hover {
+        .nav-menu span:hover, .logo:hover {
             color: #d6cfc7;
         }
         
+        /* Museum Split Layout */
         .museum-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -159,6 +161,53 @@
             font-style: italic;
         }
 
+        /* Archive View Styling */
+        .archive-content {
+            padding: 50px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .page-title {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: #e8e2d8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .page-subtitle {
+            font-size: 0.9rem;
+            color: #8c857b;
+            margin-bottom: 40px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background-color: #121110;
+            border: 1px solid #1a1917;
+            border-radius: 2px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
         /* Responsive para sa Mobile */
         @media (max-width: 900px) {
             .museum-container {
@@ -180,49 +229,45 @@
 <body>
 
     <header>
-        <div class="logo">MUSEUM OF ORDINARY THINGS</div>
+        <div class="logo" onclick="switchView('home')">MUSEUM OF ORDINARY THINGS</div>
         <div class="nav-menu">
-            <span>EXHIBITIONS</span>
-            <span>ARTIFACTS</span>
-            <span>ABOUT</span>
-            <span>DONATE AN ARTIFACT</span>
+            <span onclick="switchView('home')">HOME (LATEST 3)</span>
+            <span onclick="switchView('archive')">ARTIFACTS ARCHIVE</span>
         </div>
-        <div class="menu-btn">MENU ≡</div>
     </header>
 
-    <div class="museum-container">
-        <!-- Kaliwang Bahagi: Larawan at Nav -->
+    <!-- HOME VIEW: Single display na may Next/Prev (Top 3 Recent lang) -->
+    <div id="home-view" class="museum-container">
         <div class="left-panel">
             <div class="image-wrapper">
                 <img id="exhibit-img" src="" alt="Artifact Image">
             </div>
             <div class="image-nav">
-                <button id="prev-btn" onclick="changeExhibit(-1)">&lang; PREV</button>
+                <button id="prev-btn" onclick="changeHomeExhibit(-1)">&lang; PREV</button>
                 <span id="counter">01 / 03</span>
-                <button id="next-btn" onclick="changeExhibit(1)">NEXT &rang;</button>
+                <button id="next-btn" onclick="changeHomeExhibit(1)">NEXT &rang;</button>
             </div>
         </div>
 
-        <!-- Kanang Bahagi: Detalye at Kwento -->
         <div class="right-panel">
-            <div id="art-id" class="artifact-id">ARTIFACT #01</div>
-            <h1 id="art-title" class="artifact-title">Ang Paypay ng Tag-init</h1>
+            <div id="art-id" class="artifact-id"></div>
+            <h1 id="art-title" class="artifact-title"></h1>
 
             <div class="metadata-grid">
                 <div class="meta-label">Date</div>
-                <div id="meta-date" class="meta-value">Circa 2015</div>
+                <div id="meta-date" class="meta-value"></div>
 
                 <div class="meta-label">Origin</div>
-                <div id="meta-origin" class="meta-value">Baler, Aurora</div>
+                <div id="meta-origin" class="meta-value"></div>
 
                 <div class="meta-label">Materials</div>
-                <div id="meta-materials" class="meta-value">Bamboo, Fabric, Paper</div>
+                <div id="meta-materials" class="meta-value"></div>
 
                 <div class="meta-label">Dimensions</div>
-                <div id="meta-dimensions" class="meta-value">Approx. 35 x 20 cm</div>
+                <div id="meta-dimensions" class="meta-value"></div>
 
                 <div class="meta-label">Owner</div>
-                <div id="meta-owner" class="meta-value">Lokal na Manlalakbay</div>
+                <div id="meta-owner" class="meta-value"></div>
             </div>
 
             <div class="story-section">
@@ -238,19 +283,27 @@
         </div>
     </div>
 
+    <!-- ARCHIVE VIEW: Lahat ng artifacts -->
+    <div id="archive-view" class="archive-content hidden">
+        <div class="page-title">Artifacts Archive</div>
+        <div class="page-subtitle">Ang kumpletong talaan ng lahat ng mga exhibit sa museo.</div>
+        <div id="archive-grid" class="grid-container"></div>
+    </div>
+
     <script>
-        const exhibits = [
+        // Lahat ng artifacts ng museo (kapag nadagdagan ng Exhibit 04, ilagay lang sa unahan)
+        const allExhibits = [
             {
-                id: "ARTIFACT #01",
-                title: "Ang Paypay ng Tag-init",
-                date: "Circa 2015",
-                origin: "Baler, Aurora",
-                materials: "Bamboo, Fabric, Paper",
-                dimensions: "Approx. 35 x 20 cm",
-                owner: "Lokal na Manlalakbay",
-                story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente, mainit na hapon sa tabi ng dagat, at mga kwentuhan sa ilalim ng punong mangga.",
-                story2: "Hindi ito ang pinakamahalagang kagamitan sa bahay. Pero ito ang laging sumasalo sa init ng panahon nang walang reklamo.",
-                notes: "Isang ordinaryong sandata laban sa init na nakasaksi ng mga tahimik na sandali ng pamilya."
+                id: "ARTIFACT #03",
+                title: "Ang Tasang Tagapagtanggol sa Antok",
+                date: "Circa 2021",
+                origin: "Gilid ng Laptop na Puno ng Alikabok",
+                materials: "Ceramic na may bahid ng kape",
+                dimensions: "Approx. 10 x 8 cm",
+                owner: "Taong Laging Overdue sa Deadlines",
+                story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat.",
+                story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction.",
+                notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan."
             },
             {
                 id: "ARTIFACT #02",
@@ -260,30 +313,35 @@
                 materials: "Kahoy at Metal",
                 dimensions: "Approx. 45 x 3 cm",
                 owner: "Anonymous Curator",
-                story1: "Ang mahiwagang kasangkapang ito ay tumutugon sa mga makakati at mahirap abutin na bahagi ng katawan na hindi kayang abutin ng sariling mga kamay.",
-                story2: "Sa mga sandaling mag-isa ka at nanginginig sa kati ng likod, ito ang nagbibigay ng agarang ginhawa at tagumpay.",
-                notes: "Isang simpleng sandata para sa malalim at mahirap abutin na pangangati."
+                story1: "Ang mahiwagang kasangkapang ito ay tumutugon sa mga makakati at mahirap abutin na bahagi ng katawan.",
+                story2: "Sa mga sandaling mag-isa ka, ito ang nagbibigay ng agarang ginhawa.",
+                notes: "Isang simpleng sandata para sa malalim na pangangati."
             },
             {
-                id: "ARTIFACT #03",
-                title: "Ang Tasang Tagapagtanggol sa Antok",
-                date: "Circa 2021",
-                origin: "Gilid ng Laptop na Puno ng Alikabok",
-                materials: "Ceramic na may bahid ng kape at pangarap",
-                dimensions: "Approx. 10 x 8 cm",
-                owner: "Taong Laging Overdue sa Deadlines",
-                story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat hanggang alas-tres ng umaga para lang manood ng random reels sa TikTok.",
-                story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction, kung saan ang laman ay kalahating kape, kalahating tubig, at 99% na existential dread para sa kinabukasan.",
-                notes: "Babala: Huwag na huwag mong aamuyin ang ilalim nito kapag nakalimutan mong hugasan nang tatlong araw—may sarili na itong ecosystem."
+                id: "ARTIFACT #01",
+                title: "Ang Paypay ng Tag-init",
+                date: "Circa 2015",
+                origin: "Baler, Aurora",
+                materials: "Bamboo, Fabric, Paper",
+                dimensions: "Approx. 35 x 20 cm",
+                owner: "Lokal na Manlalakbay",
+                story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente at mainit na hapon.",
+                story2: "Hindi ito ang pinakamahalagang kagamitan pero ito ang laging sumasalo sa init.",
+                notes: "Isang ordinaryong sandata laban sa init."
             }
         ];
 
+        // Kunin lang ang unang 3 para sa Home Page
+        let homeExhibits = allExhibits.slice(0, 3);
         let currentIndex = 0;
 
-        function updateExhibit() {
-            const current = exhibits[currentIndex];
+        function updateHomeDisplay() {
+            if (homeExhibits.length === 0) return;
+            const current = homeExhibits[currentIndex];
             
-            const imgFilename = "Exhibit 0" + (currentIndex + 1) + ".jpg";
+            // Kalkulahin ang tamang exhibit number para sa image file
+            const originalIndex = allExhibits.indexOf(current);
+            const imgFilename = "Exhibit 0" + (originalIndex + 1) + ".jpg";
 
             document.getElementById("exhibit-img").src = imgFilename;
             document.getElementById("art-id").innerText = current.id;
@@ -298,21 +356,57 @@
             document.getElementById("art-notes").innerText = current.notes;
             
             const numStr = String(currentIndex + 1).padStart(2, '0');
-            const totalStr = String(exhibits.length).padStart(2, '0');
+            const totalStr = String(homeExhibits.length).padStart(2, '0');
             document.getElementById("counter").innerText = numStr + " / " + totalStr;
 
             document.getElementById("prev-btn").disabled = currentIndex === 0;
-            document.getElementById("next-btn").disabled = currentIndex === exhibits.length - 1;
+            document.getElementById("next-btn").disabled = currentIndex === homeExhibits.length - 1;
         }
 
-        function changeExhibit(direction) {
+        function changeHomeExhibit(direction) {
             currentIndex += direction;
             if (currentIndex < 0) currentIndex = 0;
-            if (currentIndex >= exhibits.length) currentIndex = exhibits.length - 1;
-            updateExhibit();
+            if (currentIndex >= homeExhibits.length) currentIndex = homeExhibits.length - 1;
+            updateHomeDisplay();
         }
 
-        updateExhibit();
+        function renderArchive() {
+            const archiveGrid = document.getElementById("archive-grid");
+            archiveGrid.innerHTML = "";
+            
+            allExhibits.forEach((item, index) => {
+                const imgNum = allExhibits.length - index;
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+                    <img src="Exhibit 0${imgNum}.jpg" alt="${item.title}" class="card-img" onerror="this.src='https://via.placeholder.com/320x220?text=Exhibit'">
+                    <div class="card-body">
+                        <div class="artifact-id">${item.id}</div>
+                        <div style="font-size: 1.25rem; color: #e8e2d8; margin-bottom: 15px;">${item.title}</div>
+                        <div style="font-size: 0.95rem; color: #c5bdb2; line-height: 1.6; margin-bottom: 15px;">${item.story1}</div>
+                        <div style="font-size: 0.85rem; color: #8c857b; font-style: italic;">${item.notes}</div>
+                    </div>
+                `;
+                archiveGrid.appendChild(card);
+            });
+        }
+
+        function switchView(viewName) {
+            const homeView = document.getElementById("home-view");
+            const archiveView = document.getElementById("archive-view");
+
+            if (viewName === 'home') {
+                homeView.classList.remove('hidden');
+                archiveView.classList.add('hidden');
+            } else if (viewName === 'archive') {
+                archiveView.classList.remove('hidden');
+                homeView.classList.add('hidden');
+            }
+        }
+
+        // Initialize
+        updateHomeDisplay();
+        renderArchive();
     </script>
 
 </body>
