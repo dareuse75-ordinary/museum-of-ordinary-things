@@ -30,15 +30,22 @@
             display: flex;
             gap: 30px;
         }
-        .nav-menu span {
+        .nav-menu span, .nav-menu a {
             color: #a8a095;
             cursor: pointer;
+            text-decoration: none;
+            background: none;
+            border: none;
+            font-family: serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            padding: 0;
         }
-        .nav-menu span:hover, .logo:hover {
+        .nav-menu span:hover, .nav-menu a:hover, .logo:hover {
             color: #d6cfc7;
         }
         
-        /* Museum Split Layout */
+        /* Museum Split Layout (Home View) */
         .museum-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -161,47 +168,47 @@
             font-style: italic;
         }
 
-        /* Archive View Styling */
-        .archive-content {
+        /* Artifacts Thumbnail Archive View */
+        .archive-container {
             padding: 50px 40px;
             max-width: 1200px;
             margin: 0 auto;
         }
-        .page-title {
+        .archive-title {
             font-size: 1.5rem;
             letter-spacing: 2px;
             color: #e8e2d8;
             margin-bottom: 10px;
             text-transform: uppercase;
         }
-        .page-subtitle {
+        .archive-subtitle {
             font-size: 0.9rem;
             color: #8c857b;
             margin-bottom: 40px;
         }
-        .grid-container {
+        .archive-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
-        .card {
+        .thumb-card {
             background-color: #121110;
             border: 1px solid #1a1917;
             border-radius: 2px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            cursor: pointer;
+            transition: border-color 0.3s;
         }
-        .card-img {
+        .thumb-card:hover {
+            border-color: #d4af37;
+        }
+        .thumb-img {
             width: 100%;
-            height: 220px;
+            height: 180px;
             object-fit: cover;
         }
-        .card-body {
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
+        .thumb-body {
+            padding: 20px;
         }
 
         .hidden {
@@ -231,12 +238,14 @@
     <header>
         <div class="logo" onclick="switchView('home')">MUSEUM OF ORDINARY THINGS</div>
         <div class="nav-menu">
-            <span onclick="switchView('home')">HOME (LATEST 3)</span>
-            <span onclick="switchView('archive')">ARTIFACTS ARCHIVE</span>
+            <span onclick="switchView('home')">EXHIBITIONS</span>
+            <span onclick="switchView('artifacts')">ARTIFACTS</span>
+            <span>ABOUT</span>
+            <span>DONATE AN ARTIFACT</span>
         </div>
     </header>
 
-    <!-- HOME VIEW: Single display na may Next/Prev (Top 3 Recent lang) -->
+    <!-- HOME VIEW: Manghihiram ng Top 3 Recents mula sa Artifacts database -->
     <div id="home-view" class="museum-container">
         <div class="left-panel">
             <div class="image-wrapper">
@@ -283,16 +292,17 @@
         </div>
     </div>
 
-    <!-- ARCHIVE VIEW: Lahat ng artifacts -->
-    <div id="archive-view" class="archive-content hidden">
-        <div class="page-title">Artifacts Archive</div>
-        <div class="page-subtitle">Ang kumpletong talaan ng lahat ng mga exhibit sa museo.</div>
-        <div id="archive-grid" class="grid-container"></div>
+    <!-- ARTIFACTS VIEW: Dito makikita ang lahat ng thumbnails at titles -->
+    <div id="artifacts-view" class="archive-container hidden">
+        <div class="archive-title">Artifacts Archive</div>
+        <div class="archive-subtitle">Ang kumpletong koleksyon ng mga ordinaryong bagay.</div>
+        <div id="artifacts-grid" class="archive-grid"></div>
     </div>
 
     <script>
-        // Lahat ng artifacts ng museo (kapag nadagdagan ng Exhibit 04, ilagay lang sa unahan)
-        const allExhibits = [
+        // 1. ANG MASTER DATABASE NG MGA ARTIFACTS
+        // Kapag nagdagdag ka ng Exhibit 04 sa hinaharap, ilagay lang sa unahan ng listahang ito.
+        const allArtifacts = [
             {
                 id: "ARTIFACT #03",
                 title: "Ang Tasang Tagapagtanggol sa Antok",
@@ -331,16 +341,16 @@
             }
         ];
 
-        // Kunin lang ang unang 3 para sa Home Page
-        let homeExhibits = allExhibits.slice(0, 3);
+        // 2. MANGHIHIRAM ANG HOMEPAGE NG UP TO 3 RECENTS MULA SA MASTER DATABASE
+        let homeExhibits = allArtifacts.slice(0, 3);
         let currentIndex = 0;
 
         function updateHomeDisplay() {
             if (homeExhibits.length === 0) return;
             const current = homeExhibits[currentIndex];
             
-            // Kalkulahin ang tamang exhibit number para sa image file
-            const originalIndex = allExhibits.indexOf(current);
+            // Hanapin ang tamang index sa master database para sa imahe
+            const originalIndex = allArtifacts.indexOf(current);
             const imgFilename = "Exhibit 0" + (originalIndex + 1) + ".jpg";
 
             document.getElementById("exhibit-img").src = imgFilename;
@@ -370,43 +380,55 @@
             updateHomeDisplay();
         }
 
-        function renderArchive() {
-            const archiveGrid = document.getElementById("archive-grid");
-            archiveGrid.innerHTML = "";
-            
-            allExhibits.forEach((item, index) => {
-                const imgNum = allExhibits.length - index;
+        // 3. I-RENDER ANG THUMBNAILS SA ARTIFACTS OPTION
+        function renderArtifactsArchive() {
+            const grid = document.getElementById("artifacts-grid");
+            grid.innerHTML = "";
+
+            allArtifacts.forEach((item, index) => {
+                const imgNum = allArtifacts.length - index;
                 const card = document.createElement("div");
-                card.className = "card";
+                card.className = "thumb-card";
                 card.innerHTML = `
-                    <img src="Exhibit 0${imgNum}.jpg" alt="${item.title}" class="card-img" onerror="this.src='https://via.placeholder.com/320x220?text=Exhibit'">
-                    <div class="card-body">
+                    <img src="Exhibit 0${imgNum}.jpg" alt="${item.title}" class="thumb-img" onerror="this.src='https://via.placeholder.com/280x180?text=Exhibit'">
+                    <div class="thumb-body">
                         <div class="artifact-id">${item.id}</div>
-                        <div style="font-size: 1.25rem; color: #e8e2d8; margin-bottom: 15px;">${item.title}</div>
-                        <div style="font-size: 0.95rem; color: #c5bdb2; line-height: 1.6; margin-bottom: 15px;">${item.story1}</div>
-                        <div style="font-size: 0.85rem; color: #8c857b; font-style: italic;">${item.notes}</div>
+                        <div style="font-size: 1.1rem; color: #e8e2d8; margin-top: 5px;">${item.title}</div>
                     </div>
                 `;
-                archiveGrid.appendChild(card);
+                // Kapag pinindot ang isang artifact sa archive, ibalik siya sa homepage at ipakita ito!
+                card.onclick = function() {
+                    // Hanapin kung nasaan ito sa homeExhibits, kung hindi man ay ilagay sa unahan o direktang i-display
+                    const targetIndex = homeExhibits.indexOf(item);
+                    if (targetIndex !== -1) {
+                        currentIndex = targetIndex;
+                    } else {
+                        currentIndex = 0;
+                    }
+                    switchView('home');
+                    updateHomeDisplay();
+                };
+                grid.appendChild(card);
             });
         }
 
+        // 4. FUNCTION PARA SA PAGLIPAT NG VIEWS
         function switchView(viewName) {
             const homeView = document.getElementById("home-view");
-            const archiveView = document.getElementById("archive-view");
+            const artifactsView = document.getElementById("artifacts-view");
 
             if (viewName === 'home') {
                 homeView.classList.remove('hidden');
-                archiveView.classList.add('hidden');
-            } else if (viewName === 'archive') {
-                archiveView.classList.remove('hidden');
+                artifactsView.classList.add('hidden');
+            } else if (viewName === 'artifacts') {
+                artifactsView.classList.remove('hidden');
                 homeView.classList.add('hidden');
             }
         }
 
-        // Initialize
+        // Patakbuhin sa simula
         updateHomeDisplay();
-        renderArchive();
+        renderArtifactsArchive();
     </script>
 
 </body>
