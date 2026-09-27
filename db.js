@@ -2,21 +2,23 @@ const MuseumDB = {
     storageKey: 'museum_ordinary_things_artifacts_v6',
     pendingKey: 'museum_ordinary_things_pending_v6',
 
-    // Kunin ang mga aprubadong artifact
     getArtifacts() {
         const stored = localStorage.getItem(this.storageKey);
         if (stored) {
             return JSON.parse(stored);
         }
         
-        // Kung walang laman ang localStorage, ibalik ang default artifact na ito para may lumabas sa Homepage!
+        // Default artifact na may initial views at likes
         const defaultArtifacts = [
             {
                 id: "Artifact #01",
                 date: "Circa 2025",
                 title: "Abaniko ni Coco",
                 story1: "Isang lumang abaniko na gawa sa dahon ng saging na ginamit noong kasagsagan ng tag-init. Puno ito ng kwento ng pagpapahinga sa ilalim ng lilim ng punong mangga.",
-                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=60"
+                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=60",
+                views: 12,
+                likes: 5,
+                liked: false
             }
         ];
         this.saveArtifacts(defaultArtifacts);
@@ -27,7 +29,6 @@ const MuseumDB = {
         localStorage.setItem(this.storageKey, JSON.stringify(artifacts));
     },
 
-    // Kunin ang mga naka-pending para sa approval
     getPendingArtifacts() {
         const stored = localStorage.getItem(this.pendingKey);
         if (stored) {
@@ -42,6 +43,9 @@ const MuseumDB = {
 
     addPendingArtifact(newArtifact) {
         const pending = this.getPendingArtifacts();
+        newArtifact.views = 0;
+        newArtifact.likes = 0;
+        newArtifact.liked = false;
         pending.unshift(newArtifact);
         this.savePendingArtifacts(pending);
     },
@@ -57,6 +61,9 @@ const MuseumDB = {
             const nextNumber = artifacts.length + 1;
             const paddedNum = String(nextNumber).padStart(2, '0');
             itemToApprove.autoName = `Artifact #${paddedNum}`;
+            itemToApprove.views = itemToApprove.views || 0;
+            itemToApprove.likes = itemToApprove.likes || 0;
+            itemToApprove.liked = false;
 
             artifacts.unshift(itemToApprove);
             this.saveArtifacts(artifacts);
@@ -71,7 +78,7 @@ const MuseumDB = {
 
     toggleLike(id) {
         const artifacts = this.getArtifacts();
-        const item = artifacts.find(a => a.id === id);
+        const item = artifacts.find(a => a.id === id || a.title === id);
         if (item) {
             item.liked = !item.liked;
             item.likes += item.liked ? 1 : -1;
@@ -81,9 +88,9 @@ const MuseumDB = {
 
     incrementView(id) {
         const artifacts = this.getArtifacts();
-        const item = artifacts.find(a => a.id === id);
+        const item = artifacts.find(a => a.id === id || a.title === id);
         if (item) {
-            item.views += 1;
+            item.views = (item.views || 0) + 1;
             this.saveArtifacts(artifacts);
         }
     }

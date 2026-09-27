@@ -26,13 +26,19 @@
         .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
 
         .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        .hero { text-align: center; margin-bottom: 50px; }
+        .hero { text-align: center; margin-bottom: 40px; }
         .hero h1 { font-size: 2rem; letter-spacing: 3px; margin-bottom: 15px; color: #f5f0eb; }
         .hero p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 600px; margin: 0 auto; }
 
         .featured-card { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 30px; margin-bottom: 40px; }
-        .featured-img { width: 100%; height: 400px; object-fit: cover; margin-bottom: 25px; filter: grayscale(20%); }
-        .meta-info { font-size: 0.75rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+        .featured-img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 20px; filter: grayscale(20%); }
+        
+        .card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .meta-info { font-size: 0.75rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
+        
+        /* Stats (Views & Likes display) */
+        .stats-container { display: flex; gap: 15px; font-size: 0.8rem; color: var(--text-muted); }
+        
         .title { font-size: 1.6rem; letter-spacing: 1px; margin-bottom: 15px; }
         .desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; }
 
@@ -40,7 +46,10 @@
         .btn { display: inline-block; padding: 10px 15px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; background: transparent; cursor: pointer; }
         .btn:hover { background: var(--accent); color: var(--bg-primary); }
         
-        /* Social Media & Audio Button Colors */
+        .btn-like { border-color: #e31b23; color: #e31b23; }
+        .btn-like.liked { background: #e31b23; color: #ffffff; }
+        .btn-like:hover { background: #e31b23; color: #ffffff; }
+
         .btn-fb { border-color: #1877f2; color: #1877f2; }
         .btn-fb:hover { background: #1877f2; color: #ffffff; }
 
@@ -77,26 +86,57 @@
 
     <script src="db.js"></script>
     <script>
-        const artifacts = MuseumDB.getArtifacts();
-        const featured = artifacts[0];
+        document.addEventListener("DOMContentLoaded", function() {
+            let artifacts = [];
+            try {
+                artifacts = MuseumDB.getArtifacts() || [];
+            } catch (e) {
+                console.error("Database error:", e);
+            }
 
-        if (featured) {
-            document.getElementById("featured-container").innerHTML = `
-                <div class="featured-card">
-                    <img src="${featured.image}" class="featured-img" alt="${featured.title}">
-                    <div class="meta-info">${featured.id} &bull; ${featured.date}</div>
-                    <h2 class="title">${featured.title}</h2>
-                    <p class="desc">${featured.story1}</p>
-                    <div class="action-buttons">
-                        <a href="artifacts.html" class="btn">Archives</a>
-                        <button onclick="shareArtifact('${featured.title}', window.location.href)" class="btn">🔗 Iba pa</button>
-                        <button onclick="shareToFacebook(window.location.href)" class="btn btn-fb">f Facebook</button>
-                        <button onclick="shareToSocial('TikTok', window.location.href)" class="btn btn-tiktok">♪ TikTok</button>
-                        <button onclick="shareToSocial('Instagram', window.location.href)" class="btn btn-ig">📸 Instagram</button>
-                        <button onclick="speakText('${encodeURIComponent(featured.title + '. ' + featured.story1)}', this)" class="btn btn-audio">🔊 Pakinggan</button>
+            const featured = artifacts.length > 0 ? artifacts[0] : null;
+            const container = document.getElementById("featured-container");
+
+            if (featured) {
+                // Dagdagan ang view kapag binuksan ang homepage
+                MuseumDB.incrementView(featured.id);
+                // I-refresh ang data para makuha ang bagong view count
+                artifacts = MuseumDB.getArtifacts();
+                const updatedFeatured = artifacts[0];
+
+                container.innerHTML = `
+                    <div class="featured-card">
+                        <img src="${updatedFeatured.image}" class="featured-img" alt="${updatedFeatured.title}">
+                        <div class="card-header-flex">
+                            <div class="meta-info">${updatedFeatured.id || 'Artifact'} &bull; ${updatedFeatured.date || ''}</div>
+                            <div class="stats-container">
+                                <span>👁️ ${updatedFeatured.views || 0} views</span>
+                                <span>❤️ ${updatedFeatured.likes || 0} likes</span>
+                            </div>
+                        </div>
+                        <h2 class="title">${updatedFeatured.title}</h2>
+                        <p class="desc">${updatedFeatured.story1}</p>
+                        <div class="action-buttons">
+                            <a href="artifacts.html" class="btn">Archives</a>
+                            <button onclick="handleLike('${updatedFeatured.id}')" class="btn btn-like ${updatedFeatured.liked ? 'liked' : ''}">
+                                ${updatedFeatured.liked ? '❤️ Nagustuhan' : '🤍 Like'} (${updatedFeatured.likes || 0})
+                            </button>
+                            <button onclick="shareArtifact('${updatedFeatured.title}', window.location.href)" class="btn">🔗 Iba pa</button>
+                            <button onclick="shareToFacebook(window.location.href)" class="btn btn-fb">f Facebook</button>
+                            <button onclick="shareToSocial('TikTok', window.location.href)" class="btn btn-tiktok">♪ TikTok</button>
+                            <button onclick="shareToSocial('Instagram', window.location.href)" class="btn btn-ig">📸 Instagram</button>
+                            <button onclick="speakText('${encodeURIComponent(updatedFeatured.title + '. ' + updatedFeatured.story1)}', this)" class="btn btn-audio">🔊 Pakinggan</button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                container.innerHTML = `<div class="featured-card" style="text-align:center;"><p class="desc">Walang makitang artifact sa ngayon.</p></div>`;
+            }
+        });
+
+        function handleLike(id) {
+            MuseumDB.toggleLike(id);
+            location.reload(); // I-refresh ang pahina para makita ang pagbabago sa like count
         }
 
         function shareArtifact(title, url) {
@@ -109,8 +149,6 @@
             } else {
                 navigator.clipboard.writeText(url).then(() => {
                     alert("Nakopya na ang link ng artifact sa clipboard!");
-                }).catch(err => {
-                    console.error('Copy error: ', err);
                 });
             }
         }
@@ -123,8 +161,6 @@
         function shareToSocial(platform, url) {
             navigator.clipboard.writeText(url).then(() => {
                 alert(`Nakopya na ang link para sa ${platform}! Pwede mo na itong i-paste sa iyong ${platform} post o story.`);
-            }).catch(err => {
-                console.error('Copy error: ', err);
             });
         }
 
@@ -142,11 +178,7 @@
                 utterance.rate = 0.9;
 
                 buttonElement.innerText = "⏹ Itigil";
-
-                utterance.onend = function() {
-                    buttonElement.innerText = "🔊 Pakinggan";
-                };
-
+                utterance.onend = function() { buttonElement.innerText = "🔊 Pakinggan"; };
                 window.speechSynthesis.speak(utterance);
             } else {
                 alert("Pasensya na, hindi sinusuportahan ng iyong browser ang Voice Over feature.");
