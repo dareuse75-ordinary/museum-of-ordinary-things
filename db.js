@@ -7,7 +7,6 @@ const MuseumDB = {
         if (stored) {
             try {
                 const parsed = JSON.parse(stored);
-                // Kung may laman na array at hindi blangko, iyon ang gamitin
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     return parsed;
                 }
@@ -16,14 +15,14 @@ const MuseumDB = {
             }
         }
         
-        // Kung blangko o walang laman ang localStorage, i-load ito:
+        // Inayos natin ang image URL para mas maging akma sa Abaniko
         const defaultArtifacts = [
             {
                 id: "Artifact #01",
                 date: "Circa 2025",
                 title: "Abaniko ni Coco",
                 story1: "Isang lumang abaniko na gawa sa dahon ng saging na ginamit noong kasagsagan ng tag-init. Puno ito ng kwento ng pagpapahinga sa ilalim ng lilim ng punong mangga.",
-                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=60",
                 views: 12,
                 likes: 5,
                 liked: false
