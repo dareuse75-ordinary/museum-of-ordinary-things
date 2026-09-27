@@ -5,10 +5,18 @@ const MuseumDB = {
     getArtifacts() {
         const stored = localStorage.getItem(this.storageKey);
         if (stored) {
-            return JSON.parse(stored);
+            try {
+                const parsed = JSON.parse(stored);
+                // Kung may laman na array at hindi blangko, iyon ang gamitin
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return parsed;
+                }
+            } catch (e) {
+                console.error("Error parsing storage", e);
+            }
         }
         
-        // Default artifact na may initial views at likes
+        // Kung blangko o walang laman ang localStorage, i-load ito:
         const defaultArtifacts = [
             {
                 id: "Artifact #01",
@@ -32,7 +40,7 @@ const MuseumDB = {
     getPendingArtifacts() {
         const stored = localStorage.getItem(this.pendingKey);
         if (stored) {
-            return JSON.parse(stored);
+            try { return JSON.parse(stored); } catch(e) { return []; }
         }
         return [];
     },
