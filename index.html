@@ -92,9 +92,14 @@
             letter-spacing: 1px;
             transition: background 0.2s, color 0.2s;
         }
-        .action-btn:hover {
+        .action-btn:hover:not(:disabled) {
             background: #d6cfc7;
             color: #0c0b0a;
+        }
+        .action-btn:disabled {
+            border-color: #262421;
+            color: #615a53;
+            cursor: default;
         }
 
         .image-nav {
@@ -285,13 +290,13 @@
                 <img id="exhibit-img" src="" alt="Artifact Image" onerror="this.src='https://via.placeholder.com/550x400?text=Exhibit+Image'">
             </div>
 
-            <!-- Views at Like Button na naka-0 -->
+            <!-- Views at Like Button -->
             <div class="exhibit-interactive-footer">
                 <div style="letter-spacing: 1px;">
                     👁️ Views: <span id="view-count" style="color: #d6cfc7;">0</span>
                 </div>
                 <div>
-                    <button class="action-btn" onclick="likeArtifact()">❤️ Like (<span id="like-count">0</span>)</button>
+                    <button id="like-btn" class="action-btn" onclick="likeArtifact()">❤️ Like (<span id="like-count">0</span>)</button>
                 </div>
             </div>
 
@@ -365,7 +370,8 @@
                 notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan.",
                 audio: "Exhibit_03.mp3",
                 views: 0,
-                likes: 0
+                likes: 0,
+                liked: false // Bagong flag para mamantina kung na-like na
             },
             {
                 id: "ARTIFACT #02",
@@ -380,7 +386,8 @@
                 notes: "Isang simpleng sandata para sa malalim na pangangati.",
                 audio: "Exhibit_02.mp3",
                 views: 0,
-                likes: 0
+                likes: 0,
+                liked: false
             },
             {
                 id: "ARTIFACT #01",
@@ -395,7 +402,8 @@
                 notes: "Isang ordinaryong sandata laban sa init.",
                 audio: "lv_0_20260927094255.mp3",
                 views: 0,
-                likes: 0
+                likes: 0,
+                liked: false
             }
         ];
 
@@ -420,6 +428,16 @@
             document.getElementById("view-count").innerText = current.views;
             document.getElementById("like-count").innerText = current.likes;
 
+            // Kontrolin kung ang like button ay disabled o pwede pang pindutin
+            const likeBtn = document.getElementById("like-btn");
+            if (current.liked) {
+                likeBtn.disabled = true;
+                likeBtn.innerText = "❤️ Liked (" + current.likes + ")";
+            } else {
+                likeBtn.disabled = false;
+                likeBtn.innerHTML = "❤️ Like (<span id='like-count'>" + current.likes + "</span>)";
+            }
+
             document.getElementById("meta-date").innerText = current.date;
             document.getElementById("meta-origin").innerText = current.origin;
             document.getElementById("meta-materials").innerText = current.materials;
@@ -438,8 +456,12 @@
         }
 
         function likeArtifact() {
-            homeExhibits[currentIndex].likes += 1;
-            document.getElementById("like-count").innerText = homeExhibits[currentIndex].likes;
+            const current = homeExhibits[currentIndex];
+            if (!current.liked) {
+                current.likes += 1;
+                current.liked = true; // Markahan na na-like na ito
+                updateHomeDisplay();
+            }
         }
 
         function changeHomeExhibit(direction) {
