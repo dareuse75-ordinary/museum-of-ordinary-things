@@ -371,7 +371,7 @@
                 audio: "Exhibit_03.mp3",
                 views: 0,
                 likes: 0,
-                liked: false // Bagong flag para mamantina kung na-like na
+                liked: false
             },
             {
                 id: "ARTIFACT #02",
@@ -407,6 +407,19 @@
             }
         ];
 
+        // I-load ang naka-save na likes at liked status mula sa localStorage
+        allArtifacts.forEach((item, index) => {
+            const savedLikes = localStorage.getItem(`artifact_${index}_likes`);
+            const savedLikedStatus = localStorage.getItem(`artifact_${index}_liked`);
+            
+            if (savedLikes !== null) {
+                item.likes = parseInt(savedLikes);
+            }
+            if (savedLikedStatus !== null) {
+                item.liked = savedLikedStatus === 'true';
+            }
+        });
+
         let homeExhibits = allArtifacts.slice(0, 3);
         let currentIndex = 0;
 
@@ -428,7 +441,6 @@
             document.getElementById("view-count").innerText = current.views;
             document.getElementById("like-count").innerText = current.likes;
 
-            // Kontrolin kung ang like button ay disabled o pwede pang pindutin
             const likeBtn = document.getElementById("like-btn");
             if (current.liked) {
                 likeBtn.disabled = true;
@@ -457,9 +469,16 @@
 
         function likeArtifact() {
             const current = homeExhibits[currentIndex];
+            const originalIndex = allArtifacts.indexOf(current);
+
             if (!current.liked) {
                 current.likes += 1;
-                current.liked = true; // Markahan na na-like na ito
+                current.liked = true;
+                
+                // I-save sa localStorage para hindi mawala pag nag-refresh
+                localStorage.setItem(`artifact_${originalIndex}_likes`, current.likes);
+                localStorage.setItem(`artifact_${originalIndex}_liked`, true);
+
                 updateHomeDisplay();
             }
         }
