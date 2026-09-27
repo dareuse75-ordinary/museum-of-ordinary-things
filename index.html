@@ -1,188 +1,214 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museum of Ordinary Things</title>
     <style>
-        :root {
-            --bg-primary: #0c0b0a;
-            --bg-secondary: #121110;
-            --border-color: #22201c;
-            --text-main: #e6dfd5;
-            --text-muted: #999085;
-            --accent: #d4af37;
+        body {
+            background-color: #0b0a09;
+            color: #e6dfd5;
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg-primary); color: var(--text-main); font-family: "Georgia", serif; }
-
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 40px; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+        /* Top Navigation Bar */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid #22201c;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        .logo { font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
-        .nav-menu { display: flex; gap: 30px; font-size: 0.8rem; letter-spacing: 2px; }
-        .nav-menu a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
-        .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
-
-        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        .hero { text-align: center; margin-bottom: 40px; }
-        .hero h1 { font-size: 2rem; letter-spacing: 3px; margin-bottom: 15px; color: #f5f0eb; }
-        .hero p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 600px; margin: 0 auto; }
-
-        .featured-card { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 30px; margin-bottom: 40px; }
-        .featured-img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 20px; filter: grayscale(20%); }
-        
-        .card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .meta-info { font-size: 0.75rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
-        
-        /* Stats (Views & Likes display) */
-        .stats-container { display: flex; gap: 15px; font-size: 0.8rem; color: var(--text-muted); }
-        
-        .title { font-size: 1.6rem; letter-spacing: 1px; margin-bottom: 15px; }
-        .desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; }
-
-        .action-buttons { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .btn { display: inline-block; padding: 10px 15px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; background: transparent; cursor: pointer; }
-        .btn:hover { background: var(--accent); color: var(--bg-primary); }
-        
-        .btn-like { border-color: #e31b23; color: #e31b23; }
-        .btn-like.liked { background: #e31b23; color: #ffffff; }
-        .btn-like:hover { background: #e31b23; color: #ffffff; }
-
-        .btn-fb { border-color: #1877f2; color: #1877f2; }
-        .btn-fb:hover { background: #1877f2; color: #ffffff; }
-
-        .btn-tiktok { border-color: #ff0050; color: #ff0050; }
-        .btn-tiktok:hover { background: #ff0050; color: #ffffff; }
-
-        .btn-ig { border-color: #e1306c; color: #e1306c; }
-        .btn-ig:hover { background: #e1306c; color: #ffffff; }
-
-        .btn-audio { border-color: #4CAF50; color: #4CAF50; }
-        .btn-audio:hover { background: #4CAF50; color: #ffffff; }
+        .top-nav a {
+            color: #999085;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .top-nav a:hover, .top-nav a.active {
+            color: #d4af37;
+        }
+        .museum-logo {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .main-content {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .intro-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .intro-section h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .intro-section p {
+            color: #999085;
+            font-size: 0.9rem;
+        }
+        .artifact-card {
+            background: #121110;
+            border: 1px solid #22201c;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .artifact-card img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border: 1px solid #22201c;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .artifact-meta {
+            font-size: 0.75rem;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .artifact-title {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .artifact-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            color: #999085;
+            border-top: 1px solid #22201c;
+            border-bottom: 1px solid #22201c;
+            padding: 10px 0;
+        }
+        .artifact-details div span {
+            color: #e6dfd5;
+        }
+        .artifact-story {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #e6dfd5;
+        }
+        .btn-pakinggan {
+            padding: 8px 15px;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Georgia', serif;
+        }
+        .btn-pakinggan:hover {
+            background: #d4af37;
+            color: #0b0a09;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">Museum of Ordinary Things</div>
-        <div class="nav-menu">
-            <a href="index.html" class="active">HOME</a>
-            <a href="artifacts.html">ARCHIVES</a>
-            <a href="exhibitions.html">EXHIBITS</a>
-            <a href="donate.html">DONATE</a>
+    <!-- Header Navigation (Home, Archives, Exhibits, Donate) -->
+    <div class="top-nav">
+        <div class="museum-logo">Museum of Ordinary Things</div>
+        <div>
+            <a href="index.html" class="active">Home</a>
+            <a href="archives.html">Archives</a>
+            <a href="exhibit.html">Exhibit</a>
+            <a href="donate.html">Donate</a>
         </div>
-    </header>
-
-    <div class="container">
-        <div class="hero">
-            <h1>Tahanan ng mga Kwento</h1>
-            <p>Isang silid-aklatan para sa mga bagay na walang pangalan, nawalan ng silbi, ngunit puno ng alaala.</p>
-        </div>
-
-        <div id="featured-container"></div>
     </div>
 
+    <div class="main-content">
+        <!-- Tahanan ng mga Kwento Header -->
+        <div class="intro-section">
+            <h1>Tahanan ng mga Kwento</h1>
+            <p>Isang siliit aklaran para sa mga bagay na walang pangalan, nawalan ng silid, ngunit puno ng alaala.</p>
+        </div>
+
+        <!-- Dito lalabas ang mga artifact mula sa database -->
+        <div id="artifact-container"></div>
+    </div>
+
+    <!-- Database Script -->
     <script src="db.js"></script>
+
+    <!-- Script para sa pag-load ng artifact, litrato, at audio -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let artifacts = [];
-            try {
-                artifacts = MuseumDB.getArtifacts() || [];
-            } catch (e) {
-                console.error("Database error:", e);
-            }
-
-            const featured = artifacts.length > 0 ? artifacts[0] : null;
-            const container = document.getElementById("featured-container");
-
-            if (featured) {
-                // Dagdagan ang view kapag binuksan ang homepage
-                MuseumDB.incrementView(featured.id);
-                // I-refresh ang data para makuha ang bagong view count
-                artifacts = MuseumDB.getArtifacts();
-                const updatedFeatured = artifacts[0];
-
-                container.innerHTML = `
-                    <div class="featured-card">
-                        <img src="${updatedFeatured.image}" class="featured-img" alt="${updatedFeatured.title}">
-                        <div class="card-header-flex">
-                            <div class="meta-info">${updatedFeatured.id || 'Artifact'} &bull; ${updatedFeatured.date || ''}</div>
-                            <div class="stats-container">
-                                <span>👁️ ${updatedFeatured.views || 0} views</span>
-                                <span>❤️ ${updatedFeatured.likes || 0} likes</span>
-                            </div>
-                        </div>
-                        <h2 class="title">${updatedFeatured.title}</h2>
-                        <p class="desc">${updatedFeatured.story1}</p>
-                        <div class="action-buttons">
-                            <a href="artifacts.html" class="btn">Archives</a>
-                            <button onclick="handleLike('${updatedFeatured.id}')" class="btn btn-like ${updatedFeatured.liked ? 'liked' : ''}">
-                                ${updatedFeatured.liked ? '❤️ Nagustuhan' : '🤍 Like'} (${updatedFeatured.likes || 0})
-                            </button>
-                            <button onclick="shareArtifact('${updatedFeatured.title}', window.location.href)" class="btn">🔗 Iba pa</button>
-                            <button onclick="shareToFacebook(window.location.href)" class="btn btn-fb">f Facebook</button>
-                            <button onclick="shareToSocial('TikTok', window.location.href)" class="btn btn-tiktok">♪ TikTok</button>
-                            <button onclick="shareToSocial('Instagram', window.location.href)" class="btn btn-ig">📸 Instagram</button>
-                            <button onclick="speakText('${encodeURIComponent(updatedFeatured.title + '. ' + updatedFeatured.story1)}', this)" class="btn btn-audio">🔊 Pakinggan</button>
-                        </div>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `<div class="featured-card" style="text-align:center;"><p class="desc">Walang makitang artifact sa ngayon.</p></div>`;
-            }
+            loadMuseumHome();
         });
 
-        function handleLike(id) {
-            MuseumDB.toggleLike(id);
-            location.reload(); // I-refresh ang pahina para makita ang pagbabago sa like count
-        }
-
-        function shareArtifact(title, url) {
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: `Tingnan ang kwento ng artifact na ito: ${title}`,
-                    url: url,
-                }).catch((error) => console.log('Error:', error));
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    alert("Nakopya na ang link ng artifact sa clipboard!");
-                });
+        function playAudio(audioUrl) {
+            if (!audioUrl || audioUrl.trim() === "") {
+                alert("Wala pang voice-over audio ang artifact na ito. Magdagdag sa Admin Panel.");
+                return;
             }
-        }
-
-        function shareToFacebook(url) {
-            const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-            window.open(fbShareUrl, '_blank', 'width=600,height=400');
-        }
-
-        function shareToSocial(platform, url) {
-            navigator.clipboard.writeText(url).then(() => {
-                alert(`Nakopya na ang link para sa ${platform}! Pwede mo na itong i-paste sa iyong ${platform} post o story.`);
+            const audio = new Audio(audioUrl);
+            audio.play().catch(error => {
+                console.error("Error sa pag-play ng audio:", error);
+                alert("Hindi ma-play ang audio. Siguraduhing tama at naka-set sa 'Anyone with the link' ang iyong Google Drive link.");
             });
         }
 
-        function speakText(encodedText, buttonElement) {
-            if ('speechSynthesis' in window) {
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                    buttonElement.innerText = "🔊 Pakinggan";
-                    return;
-                }
+        function loadMuseumHome() {
+            const artifacts = MuseumDB.getArtifacts();
+            const container = document.getElementById("artifact-container");
 
-                const text = decodeURIComponent(encodedText);
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'fil-PH';
-                utterance.rate = 0.9;
+            if (!container) return;
 
-                buttonElement.innerText = "⏹ Itigil";
-                utterance.onend = function() { buttonElement.innerText = "🔊 Pakinggan"; };
-                window.speechSynthesis.speak(utterance);
-            } else {
-                alert("Pasensya na, hindi sinusuportahan ng iyong browser ang Voice Over feature.");
+            if (artifacts.length === 0) {
+                container.innerHTML = '<p style="color: #999085; text-align: center;">Walang makitang artifact.</p>';
+                return;
             }
+
+            let htmlContent = "";
+            
+            for (let i = 0; i < artifacts.length; i++) {
+                let item = artifacts[i];
+                
+                let pinanggalingan = item.pinanggalingan ? item.pinanggalingan : 'Walang nakalagay';
+                let materyales = item.materyales ? item.materyales : 'Walang nakalagay';
+                let nagmamayari = item.nagmamayari ? item.nagmamayari : 'Walang nakalagay';
+                let tala = item.tala ? item.tala : 'Walang nakalagay';
+                
+                // Sinisiguro natin na babagsak sa abaniko.jpg kung sakaling walang laman ang image field
+                let imageSrc = (item.image && item.image.trim() !== "") ? item.image : 'abaniko.jpg';
+
+                htmlContent += '<div class="artifact-card">';
+                // Siguraduhing naka-upload ang abaniko.jpg sa GitHub repository mo para lumitaw ito nang tama
+                htmlContent += '<img src="' + imageSrc + '" alt="' + item.title + '" onerror="this.onerror=null; this.src=\'abaniko.jpg\';">';
+                
+                htmlContent += '<div class="artifact-meta">' + (item.id || 'Artifact #01') + ' &bull; ' + (item.date || 'Circa 2025') + '</div>';
+                htmlContent += '<h2 class="artifact-title">' + item.title + '</h2>';
+                
+                htmlContent += '<div class="artifact-details">';
+                htmlContent += '<div><b>PINANGGAGALINGAN:</b><br><span>' + pinanggalingan + '</span></div>';
+                htmlContent += '<div><b>MATERYALES:</b><br><span>' + materyales + '</span></div>';
+                htmlContent += '<div><b>NAGMAMAY-ARI:</b><br><span>' + nagmamayari + '</span></div>';
+                htmlContent += '<div><b>TALA:</b><br><span>' + tala + '</span></div>';
+                htmlContent += '</div>';
+
+                htmlContent += '<p class="artifact-story">' + item.story1 + '</p>';
+                
+                htmlContent += '<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">';
+                htmlContent += '<button onclick="playAudio(\'' + (item.audio || '') + '\')" class="btn-pakinggan">Pakinggan</button>';
+                htmlContent += '</div>';
+                
+                htmlContent += '</div>';
+            }
+
+            container.innerHTML = htmlContent;
         }
     </script>
 </body>

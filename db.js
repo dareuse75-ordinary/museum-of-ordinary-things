@@ -1,6 +1,6 @@
 const MuseumDB = {
-    storageKey: 'museum_ordinary_things_artifacts_v11',
-    pendingKey: 'museum_ordinary_things_pending_v11',
+    storageKey: 'museum_ordinary_things_artifacts_v14',
+    pendingKey: 'museum_ordinary_things_pending_v14',
 
     getArtifacts() {
         const stored = localStorage.getItem(this.storageKey);
@@ -22,11 +22,11 @@ const MuseumDB = {
                 title: "Abaniko ni Coco",
                 story1: "Binili dahil \"ang cute pang-display.\" Ginamit nang dalawang beses, itinago nang sampung taon, tapos biglang naging antique. Tested sa init ng Baler at sa traffic ng EDSA. Parehong pumasa sa lakas ng hangin.",
                 image: "abaniko.jpg",
-                pinanggalingan: "",
-                materyales: "",
-                nagmamayari: "",
-                tala: "",
-                audio: "", // Dito maiimbak ang audio link
+                pinanggalingan: "Baler, Aurora",
+                materyales: "Sawali at Tela",
+                nagmamayari: "Coco",
+                tala: "Paboritong pamaypay sa initan",
+                audio: "", // Dito mapupunta ang Google Drive audio link na ilalagay mo sa admin panel
                 views: 14,
                 likes: 0,
                 liked: false
@@ -88,7 +88,6 @@ const MuseumDB = {
         this.savePendingArtifacts(filtered);
     },
 
-    // Bagong function para i-save ang audio link ng isang artifact
     updateArtifactAudio(id, audioLink) {
         const artifacts = this.getArtifacts();
         const item = artifacts.find(a => a.id === id || a.title === id);
