@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museum of Ordinary Things - Admin Panel</title>
+    <title>Museum Admin Panel</title>
     <style>
         :root {
             --bg-primary: #0c0b0a;
@@ -26,27 +26,27 @@
         .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
 
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .title { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; color: #f5f0eb; }
-        .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px; }
+        .panel-title { font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 10px; color: var(--accent); }
+        .panel-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px; }
 
-        .section-box { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 30px; margin-bottom: 40px; }
-        .section-title { font-size: 1.1rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .section-box { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 25px; margin-bottom: 30px; }
+        .section-box h3 { font-size: 1rem; letter-spacing: 1px; color: var(--accent); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-        input[type="text"], select { width: 100%; padding: 10px 12px; background: #080706; border: 1px solid var(--border-color); color: var(--text-main); font-family: inherit; font-size: 0.95rem; }
-        input:focus, select:focus { border-color: var(--accent); outline: none; }
+        .artifact-row { display: flex; gap: 15px; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .artifact-thumb { width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--border-color); }
+        .artifact-details { flex: 1; min-width: 200px; }
+        .artifact-title { font-size: 1rem; color: #fff; margin-bottom: 4px; }
+        .artifact-id { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
 
-        .btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px 20px; cursor: pointer; font-family: inherit; letter-spacing: 1px; text-transform: uppercase; font-size: 0.75rem; font-weight: bold; transition: 0.3s; }
+        .audio-input-group { width: 100%; display: flex; gap: 10px; margin-top: 10px; }
+        .audio-input { flex: 1; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; font-size: 0.85rem; }
+        
+        .btn { padding: 8px 15px; border: 1px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; }
         .btn:hover { background: var(--accent); color: var(--bg-primary); }
-        .btn-reject { border-color: #d9534f; color: #d9534f; }
-        .btn-reject:hover { background: #d9534f; color: #fff; }
+        .btn-danger { border-color: #e31b23; color: #e31b23; }
+        .btn-danger:hover { background: #e31b23; color: #fff; }
 
-        .grid-list { display: grid; gap: 15px; }
-        .list-card { background: #080706; border: 1px solid var(--border-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .list-card-info h4 { font-size: 1rem; color: #f5f0eb; margin-bottom: 4px; }
-        .list-card-info p { font-size: 0.8rem; color: var(--text-muted); }
-        .empty-notice { color: var(--text-muted); font-size: 0.85rem; font-style: italic; text-align: center; padding: 20px; }
+        .empty-text { color: var(--text-muted); font-size: 0.85rem; font-style: italic; text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
@@ -58,195 +58,103 @@
             <a href="artifacts.html">ARCHIVES</a>
             <a href="exhibitions.html">EXHIBITS</a>
             <a href="donate.html">DONATE</a>
-            <a href="admin.html" class="active" style="color: var(--accent);">ADMIN</a>
+            <a href="admin.html" class="active">ADMIN</a>
         </div>
     </header>
 
     <div class="container">
-        <div class="title">Admin Control Panel</div>
-        <div class="subtitle">Pamahalaan ang mga donasyon, lumikha ng mga eksibit, at isaayos kung saan mapupunta ang mga artifact.</div>
+        <h1 class="panel-title">ADMIN CONTROL PANEL</h1>
+        <p class="panel-desc">Pamahalaan ang mga donasyon, lagyan ng voice-over audio ang mga artifact, at ayusin kung saan mapupunta ang mga ito.</p>
 
-        <!-- 1. MGA NAKABINBING DONASYON -->
+        <!-- PENDING DONATIONS SECTION -->
         <div class="section-box">
-            <div class="section-title">1. Mga Nakabinbing Donasyon (Pending)</div>
-            <div id="pending-container" class="grid-list"></div>
+            <h3>1. MGA NAKABINBING DONASYON (PENDING)</h3>
+            <div id="pending-list"></div>
         </div>
 
-        <!-- 2. GUMAGAWA NG EKSIBIT -->
+        <!-- ACTIVE ARTIFACTS AUDIO MANAGER SECTION -->
         <div class="section-box">
-            <div class="section-title">2. Magdagdag ng Bagong Eksibit (Collection)</div>
-            <form onsubmit="AdminApp.addExhibit(event)">
-                <div class="form-group">
-                    <label>Pangalan o Pamagat ng Eksibit</label>
-                    <input type="text" id="ex-title" required placeholder="Hal. Koleksyon 03: Mga Bagay na Naiwan">
-                </div>
-                <button type="submit" class="btn">Lumikha ng Eksibit</button>
-            </form>
-            <div style="margin-top: 20px;">
-                <label>Mga Kasalukuyang Eksibit:</label>
-                <div id="exhibits-list" class="grid-list" style="margin-top: 10px;"></div>
-            </div>
-        </div>
-
-        <!-- 3. PAG-ASSIGN NG ARTIFACT SA EKSIBIT O ARCHIVES -->
-        <div class="section-box">
-            <div class="section-title">3. Isaayos ang Lagay ng Artifact</div>
-            <form onsubmit="AdminApp.updateArtifactSettings(event)">
-                <div class="form-group">
-                    <label>Piliin ang Artifact</label>
-                    <select id="assign-artifact" required></select>
-                </div>
-                <div class="form-group">
-                    <label>Saan ito ilalagay?</label>
-                    <select id="assign-display" onchange="AdminApp.toggleExhibitSelect()" required>
-                        <option value="exhibit">Para sa Eksibit</option>
-                        <option value="archives">Pang Archives Lang</option>
-                    </select>
-                </div>
-                <div class="form-group" id="exhibit-group">
-                    <label>Piliin kung Saang Eksibit</label>
-                    <select id="assign-exhibit"></select>
-                </div>
-                <button type="submit" class="btn">I-save ang Pagbabago</button>
-            </form>
+            <h3>2. MGA AKTIBONG ARTIFACT (MAG-INPUT NG VOICE-OVER AUDIO)</h3>
+            <div id="active-artifacts-list"></div>
         </div>
     </div>
 
     <script src="db.js"></script>
     <script>
-        const AdminApp = {
-            init() {
-                this.loadPending();
-                this.loadExhibits();
-                this.loadAssignOptions();
-                this.toggleExhibitSelect();
-            },
+        document.addEventListener("DOMContentLoaded", function() {
+            loadPending();
+            loadActiveArtifacts();
+        });
 
-            loadPending() {
-                const pending = MuseumDB.getPendingArtifacts();
-                const container = document.getElementById("pending-container");
-                if (pending.length === 0) {
-                    container.innerHTML = `<div class="empty-notice">Walang nakabinbing donasyon.</div>`;
-                    return;
-                }
-                container.innerHTML = pending.map(item => `
-                    <div class="list-card">
-                        <div class="list-card-info">
-                            <h4>${item.title} (${item.owner})</h4>
-                            <p>${item.id} &bull; ${item.date}</p>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn" onclick="AdminApp.approve('${item.id}')">Aprubahan</button>
-                            <button class="btn btn-reject" onclick="AdminApp.reject('${item.id}')">Tanggihan</button>
-                        </div>
-                    </div>
-                `).join('');
-            },
+        function loadPending() {
+            const pending = MuseumDB.getPendingArtifacts();
+            const container = document.getElementById("pending-list");
 
-            approve(id) {
-                MuseumDB.approveArtifact(id);
-                alert("Na-aprubahan na ang artifact!");
-                this.init();
-            },
-
-            reject(id) {
-                if (confirm("Sigurado ka bang gusto mong tanggihan?")) {
-                    MuseumDB.rejectArtifact(id);
-                    this.init();
-                }
-            },
-
-            addExhibit(e) {
-                e.preventDefault();
-                const title = document.getElementById("ex-title").value;
-                const exhibits = MuseumDB.getExhibits();
-                const newId = 'ex_' + Date.now();
-                exhibits.push({ id: newId, title: title });
-                MuseumDB.saveExhibits(exhibits);
-                document.getElementById("ex-title").value = '';
-                alert("Matagumpay na naidagdag ang bagong eksibit!");
-                this.init();
-            },
-
-            loadExhibits() {
-                const exhibits = MuseumDB.getExhibits();
-                const container = document.getElementById("exhibits-list");
-                if (exhibits.length === 0) {
-                    container.innerHTML = `<div class="empty-notice">Wala pang eksibit.</div>`;
-                    return;
-                }
-                container.innerHTML = exhibits.map(ex => `
-                    <div class="list-card">
-                        <div class="list-card-info">
-                            <h4>${ex.title}</h4>
-                            <p>ID: ${ex.id}</p>
-                        </div>
-                        <button class="btn btn-reject" onclick="AdminApp.deleteExhibit('${ex.id}')">Burahin</button>
-                    </div>
-                `).join('');
-            },
-
-            deleteExhibit(id) {
-                if (confirm("Burahin ang eksibit na ito?")) {
-                    let exhibits = MuseumDB.getExhibits();
-                    exhibits = exhibits.filter(e => e.id !== id);
-                    MuseumDB.saveExhibits(exhibits);
-                    this.init();
-                }
-            },
-
-            loadAssignOptions() {
-                const artifacts = MuseumDB.getArtifacts();
-                const exhibits = MuseumDB.getExhibits();
-                
-                const artSelect = document.getElementById("assign-artifact");
-                const exSelect = document.getElementById("assign-exhibit");
-
-                artSelect.innerHTML = artifacts.length ? artifacts.map(a => `<option value="${a.id}">${a.title} (${a.id})</option>`).join('') : `<option value="">Walang aprubadong artifact</option>`;
-                exSelect.innerHTML = exhibits.length ? exhibits.map(e => `<option value="${e.id}">${e.title}</option>`).join('') : `<option value="">Wala pang eksibit</option>`;
-            },
-
-            toggleExhibitSelect() {
-                const displayOpt = document.getElementById("assign-display").value;
-                const exhibitGroup = document.getElementById("exhibit-group");
-                const exhibitSelect = document.getElementById("assign-exhibit");
-                
-                if (displayOpt === 'archives') {
-                    exhibitGroup.style.display = 'none';
-                    exhibitSelect.removeAttribute('required');
-                } else {
-                    exhibitGroup.style.display = 'block';
-                    exhibitSelect.setAttribute('required', 'true');
-                }
-            },
-
-            updateArtifactSettings(e) {
-                e.preventDefault();
-                const artId = document.getElementById("assign-artifact").value;
-                const displayOpt = document.getElementById("assign-display").value;
-                const exId = document.getElementById("assign-exhibit").value;
-
-                if (!artId) {
-                    alert("Mangyaring pumili ng artifact.");
-                    return;
-                }
-
-                const artifacts = MuseumDB.getArtifacts();
-                const item = artifacts.find(a => a.id === artId);
-                if (item) {
-                    item.display = displayOpt; 
-                    if (displayOpt === 'exhibit') {
-                        item.exhibit = exId;
-                    } else {
-                        item.exhibit = ''; 
-                    }
-                    MuseumDB.saveArtifacts(artifacts);
-                    alert("Matagumpay na nai-save ang mga setting ng artifact!");
-                }
+            if (pending.length === 0) {
+                container.innerHTML = `<div class="empty-text">Walang nakabinbing donasyon.</div>`;
+                return;
             }
-        };
 
-        AdminApp.init();
+            container.innerHTML = pending.map(item => `
+                <div class="artifact-row">
+                    <img src="${item.image}" class="artifact-thumb" alt="${item.title}">
+                    <div class="artifact-details">
+                        <div class="artifact-title">${item.title}</div>
+                        <div class="artifact-id">Mula kay: ${item.nagmamayari || 'Anonymous'}</div>
+                    </div>
+                    <button onclick="approve('${item.id}')" class="btn">Aprubahan</button>
+                    <button onclick="reject('${item.id}')" class="btn btn-danger">Tanggihan</button>
+                </div>
+            `).join('');
+        }
+
+        function loadActiveArtifacts() {
+            const artifacts = MuseumDB.getArtifacts();
+            const container = document.getElementById("active-artifacts-list");
+
+            if (artifacts.length === 0) {
+                container.innerHTML = `<div class="empty-text">Walang nakikitang artifact.</div>`;
+                return;
+            }
+
+            container.innerHTML = artifacts.map(item => `
+                <div class="artifact-row">
+                    <img src="${item.image}" class="artifact-thumb" alt="${item.title}">
+                    <div class="artifact-details">
+                        <div class="artifact-title">${item.title}</div>
+                        <div class="artifact-id">${item.id} &bull; ${item.date}</div>
+                        <div class="audio-input-group">
+                            <input type="text" id="audio-${item.id}" class="audio-input" value="${item.audio || ''}" placeholder="I-paste ang audio link dito (hal. voice.mp3)">
+                            <button onclick="saveAudio('${item.id}')" class="btn">I-save Audio</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function approve(id) {
+            MuseumDB.approveArtifact(id);
+            loadPending();
+            loadActiveArtifacts();
+            alert("Na-approve na ang artifact!");
+        }
+
+        function reject(id) {
+            if (confirm("Sigurado ka bang gusto mong tanggihan ang donasyong ito?")) {
+                MuseumDB.rejectArtifact(id);
+                loadPending();
+            }
+        }
+
+        function saveAudio(id) {
+            const inputVal = document.getElementById(`audio-${id}`).value;
+            const success = MuseumDB.updateArtifactAudio(id, inputVal);
+            if (success) {
+                alert("Matagumpay na na-save ang audio link para sa artifact na ito!");
+            } else {
+                alert("May naganap na error sa pag-save.");
+            }
+        }
     </script>
 </body>
 </html>

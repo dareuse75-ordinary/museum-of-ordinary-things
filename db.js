@@ -1,6 +1,6 @@
 const MuseumDB = {
-    storageKey: 'museum_ordinary_things_artifacts_v6',
-    pendingKey: 'museum_ordinary_things_pending_v6',
+    storageKey: 'museum_ordinary_things_artifacts_v11',
+    pendingKey: 'museum_ordinary_things_pending_v11',
 
     getArtifacts() {
         const stored = localStorage.getItem(this.storageKey);
@@ -15,16 +15,20 @@ const MuseumDB = {
             }
         }
         
-        // Inayos natin ang image URL para mas maging akma sa Abaniko
         const defaultArtifacts = [
             {
                 id: "Artifact #01",
                 date: "Circa 2025",
                 title: "Abaniko ni Coco",
-                story1: "Isang lumang abaniko na gawa sa dahon ng saging na ginamit noong kasagsagan ng tag-init. Puno ito ng kwento ng pagpapahinga sa ilalim ng lilim ng punong mangga.",
-                image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=60",
-                views: 12,
-                likes: 5,
+                story1: "Binili dahil \"ang cute pang-display.\" Ginamit nang dalawang beses, itinago nang sampung taon, tapos biglang naging antique. Tested sa init ng Baler at sa traffic ng EDSA. Parehong pumasa sa lakas ng hangin.",
+                image: "abaniko.jpg",
+                pinanggalingan: "",
+                materyales: "",
+                nagmamayari: "",
+                tala: "",
+                audio: "", // Dito maiimbak ang audio link
+                views: 14,
+                likes: 0,
                 liked: false
             }
         ];
@@ -71,6 +75,7 @@ const MuseumDB = {
             itemToApprove.views = itemToApprove.views || 0;
             itemToApprove.likes = itemToApprove.likes || 0;
             itemToApprove.liked = false;
+            itemToApprove.audio = "";
 
             artifacts.unshift(itemToApprove);
             this.saveArtifacts(artifacts);
@@ -81,6 +86,18 @@ const MuseumDB = {
         const pending = this.getPendingArtifacts();
         const filtered = pending.filter(a => a.id !== id);
         this.savePendingArtifacts(filtered);
+    },
+
+    // Bagong function para i-save ang audio link ng isang artifact
+    updateArtifactAudio(id, audioLink) {
+        const artifacts = this.getArtifacts();
+        const item = artifacts.find(a => a.id === id || a.title === id);
+        if (item) {
+            item.audio = audioLink;
+            this.saveArtifacts(artifacts);
+            return true;
+        }
+        return false;
     },
 
     toggleLike(id) {
