@@ -50,6 +50,7 @@
             <a href="artifacts.html">ARCHIVES</a>
             <a href="exhibitions.html">EXHIBITS</a>
             <a href="donate.html" class="active">DONATE</a>
+            <a href="admin.html">ADMIN</a>
         </div>
     </header>
 
@@ -58,13 +59,6 @@
         <div class="subtitle">Pumili ng larawan mula sa iyong gallery at isumite para sa pagsusuri ng admin.</div>
 
         <form onsubmit="DonateApp.submitForm(event)">
-            <div class="form-group">
-                <label>Piliin ang Eksibit (Collection)</label>
-                <select id="d-exhibit" required>
-                    <option value="exhibit1">Koleksyon 01: Mga Bakas ng Pagmamadali</option>
-                    <option value="exhibit2">Koleksyon 02: Tahanan at Alaala</option>
-                </select>
-            </div>
             <div class="form-group">
                 <label>Pamagat ng Artifact</label>
                 <input type="text" id="d-title" required placeholder="Hal. Ang sirang payong">
@@ -123,7 +117,6 @@
 
                     const newArtifact = {
                         id: `ARTIFACT #${newIdNum}`,
-                        exhibit: document.getElementById("d-exhibit").value,
                         title: document.getElementById("d-title").value,
                         date: document.getElementById("d-date").value,
                         origin: document.getElementById("d-origin").value,

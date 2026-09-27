@@ -36,8 +36,22 @@
         .title { font-size: 1.6rem; letter-spacing: 1px; margin-bottom: 15px; }
         .desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; }
 
-        .btn { display: inline-block; padding: 10px 20px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
+        .action-buttons { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 10px 15px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; background: transparent; cursor: pointer; }
         .btn:hover { background: var(--accent); color: var(--bg-primary); }
+        
+        /* Social Media & Audio Button Colors */
+        .btn-fb { border-color: #1877f2; color: #1877f2; }
+        .btn-fb:hover { background: #1877f2; color: #ffffff; }
+
+        .btn-tiktok { border-color: #ff0050; color: #ff0050; }
+        .btn-tiktok:hover { background: #ff0050; color: #ffffff; }
+
+        .btn-ig { border-color: #e1306c; color: #e1306c; }
+        .btn-ig:hover { background: #e1306c; color: #ffffff; }
+
+        .btn-audio { border-color: #4CAF50; color: #4CAF50; }
+        .btn-audio:hover { background: #4CAF50; color: #ffffff; }
     </style>
 </head>
 <body>
@@ -73,9 +87,66 @@
                     <div class="meta-info">${featured.id} &bull; ${featured.date}</div>
                     <h2 class="title">${featured.title}</h2>
                     <p class="desc">${featured.story1}</p>
-                    <a href="artifacts.html" class="btn">Tingnan sa Archives</a>
+                    <div class="action-buttons">
+                        <a href="artifacts.html" class="btn">Archives</a>
+                        <button onclick="shareArtifact('${featured.title}', window.location.href)" class="btn">🔗 Iba pa</button>
+                        <button onclick="shareToFacebook(window.location.href)" class="btn btn-fb">f Facebook</button>
+                        <button onclick="shareToSocial('TikTok', window.location.href)" class="btn btn-tiktok">♪ TikTok</button>
+                        <button onclick="shareToSocial('Instagram', window.location.href)" class="btn btn-ig">📸 Instagram</button>
+                        <button onclick="speakText('${encodeURIComponent(featured.title + '. ' + featured.story1)}', this)" class="btn btn-audio">🔊 Pakinggan</button>
+                    </div>
                 </div>
             `;
+        }
+
+        function shareArtifact(title, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: `Tingnan ang kwento ng artifact na ito: ${title}`,
+                    url: url,
+                }).catch((error) => console.log('Error:', error));
+            } else {
+                copyToClipboard(url);
+            }
+        }
+
+        function shareToFacebook(url) {
+            const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            window.open(fbShareUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareToSocial(platform, url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert(`Nakopya na ang link para sa ${platform}! Pwede mo na itong i-paste sa iyong ${platform} post o story.`);
+            }).catch(err => {
+                console.error('Copy error: ', err);
+            });
+        }
+
+        function speakText(encodedText, buttonElement) {
+            if ('speechSynthesis' in window) {
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                    buttonElement.innerText = "🔊 Pakinggan";
+                    return;
+                }
+
+                const text = decodeURIComponent(encodedText);
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fil-PH';
+                utterance.rate = 0.9;
+
+                buttonElement.innerText = "⏹ Itigil";
+
+                utterance.onend = function() {
+                    buttonElement.innerText = "🔊 Pakinggan";
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Pasensya na, hindi sinusuportahan ng iyong browser ang Voice Over feature.");
+            }
         }
     </script>
 </body>

@@ -35,7 +35,7 @@ const MuseumDB = {
         this.savePendingArtifacts(pending);
     },
 
-    // Pag-apruba: Ililipat mula pending patungo sa active/approved artifacts
+    // Pag-apruba: Ililipat mula pending patungo sa active/approved artifacts na may automatic numbering
     approveArtifact(id) {
         const pending = this.getPendingArtifacts();
         const index = pending.findIndex(a => a.id === id);
@@ -44,6 +44,12 @@ const MuseumDB = {
             this.savePendingArtifacts(pending);
 
             const artifacts = this.getArtifacts();
+            
+            // Awtomatikong magbigay ng sunod-sunod na numero/pangalan (Artifact #01, Artifact #02, ...)
+            const nextNumber = artifacts.length + 1;
+            const paddedNum = String(nextNumber).padStart(2, '0');
+            itemToApprove.autoName = `Artifact #${paddedNum}`;
+
             artifacts.unshift(itemToApprove);
             this.saveArtifacts(artifacts);
         }
