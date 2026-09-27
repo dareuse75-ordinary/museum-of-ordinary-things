@@ -244,7 +244,6 @@
             display: none !important;
         }
 
-        /* Responsive para sa Mobile */
         @media (max-width: 900px) {
             .museum-container {
                 grid-template-columns: 1fr;
@@ -281,7 +280,6 @@
                 <img id="exhibit-img" src="" alt="Artifact Image">
             </div>
 
-            <!-- Views at Like Button -->
             <div class="exhibit-interactive-footer">
                 <div style="letter-spacing: 1px;">
                     👁️ Views: <span id="view-count" style="color: #d6cfc7;">0</span>
@@ -302,7 +300,6 @@
             <div id="art-id" class="artifact-id"></div>
             <h1 id="art-title" class="artifact-title"></h1>
 
-            <!-- Audio Player Section -->
             <div class="audio-container">
                 <audio id="art-audio" controls>
                     Your browser does not support the audio element.
@@ -401,7 +398,6 @@
             }
         ];
 
-        // I-load ang likes at liked status mula sa localStorage
         allArtifacts.forEach((item, index) => {
             const savedLikes = localStorage.getItem(`artifact_${index}_likes`);
             const savedLikedStatus = localStorage.getItem(`artifact_${index}_liked`);
@@ -441,6 +437,7 @@
                 likeBtn.innerHTML = "❤️ Like (<span id='like-count'>" + current.likes + "</span>)";
             }
 
+            // Dito inayos para bawat artifact ay kumuha ng sarili nitong metadata properties
             document.getElementById("meta-date").innerText = current.date;
             document.getElementById("meta-origin").innerText = current.origin;
             document.getElementById("meta-materials").innerText = current.materials;
