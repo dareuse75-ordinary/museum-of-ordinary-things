@@ -30,18 +30,12 @@
             display: flex;
             gap: 30px;
         }
-        .nav-menu span, .nav-menu a {
+        .nav-menu span {
             color: #a8a095;
             cursor: pointer;
-            text-decoration: none;
-            background: none;
-            border: none;
-            font-family: serif;
-            font-size: 0.85rem;
             letter-spacing: 2px;
-            padding: 0;
         }
-        .nav-menu span:hover, .nav-menu a:hover, .logo:hover {
+        .nav-menu span:hover, .logo:hover {
             color: #d6cfc7;
         }
         
@@ -52,7 +46,7 @@
             min-height: calc(100vh - 80px);
         }
 
-        /* Left Side: Image & Navigation */
+        /* Left Side: Image, Audio, Views, Likes & Navigation */
         .left-panel {
             background-color: #121110;
             display: flex;
@@ -74,12 +68,41 @@
             border-radius: 2px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+
+        /* Views at Like Button sa ibaba ng litrato (Nakatakda sa Zero) */
+        .exhibit-interactive-footer {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 550px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #a8a095;
+            border-top: 1px solid #1a1917;
+            padding-top: 15px;
+        }
+        .action-btn {
+            background: none;
+            border: 1px solid #383531;
+            color: #d6cfc7;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-family: serif;
+            letter-spacing: 1px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .action-btn:hover {
+            background: #d6cfc7;
+            color: #0c0b0a;
+        }
+
         .image-nav {
             display: flex;
             justify-content: space-between;
             width: 100%;
             max-width: 550px;
-            margin-top: 30px;
+            margin-top: 25px;
             font-size: 0.85rem;
             letter-spacing: 2px;
             color: #8c857b;
@@ -120,10 +143,20 @@
             font-weight: normal;
             line-height: 1.2;
             color: #e8e2d8;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             font-family: serif;
         }
         
+        /* Audio Player Styling */
+        .audio-container {
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        .audio-container audio {
+            width: 100%;
+            accent-color: #d4af37;
+        }
+
         .metadata-grid {
             display: grid;
             grid-template-columns: 130px 1fr;
@@ -245,12 +278,23 @@
         </div>
     </header>
 
-    <!-- HOME VIEW: Manghihiram ng Top 3 Recents mula sa Artifacts database -->
+    <!-- HOME VIEW -->
     <div id="home-view" class="museum-container">
         <div class="left-panel">
             <div class="image-wrapper">
-                <img id="exhibit-img" src="" alt="Artifact Image">
+                <img id="exhibit-img" src="" alt="Artifact Image" onerror="this.src='https://via.placeholder.com/550x400?text=Exhibit+Image'">
             </div>
+
+            <!-- Views at Like Button na naka-0 muna -->
+            <div class="exhibit-interactive-footer">
+                <div style="letter-spacing: 1px;">
+                    👁️ Views: <span id="view-count" style="color: #d6cfc7;">0</span>
+                </div>
+                <div>
+                    <button class="action-btn" onclick="likeArtifact()">❤️ Like (<span id="like-count">0</span>)</button>
+                </div>
+            </div>
+
             <div class="image-nav">
                 <button id="prev-btn" onclick="changeHomeExhibit(-1)">&lang; PREV</button>
                 <span id="counter">01 / 03</span>
@@ -261,6 +305,13 @@
         <div class="right-panel">
             <div id="art-id" class="artifact-id"></div>
             <h1 id="art-title" class="artifact-title"></h1>
+
+            <!-- Audio Player Section -->
+            <div class="audio-container">
+                <audio id="art-audio" controls>
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
 
             <div class="metadata-grid">
                 <div class="meta-label">Date</div>
@@ -292,7 +343,7 @@
         </div>
     </div>
 
-    <!-- ARTIFACTS VIEW: Dito makikita ang lahat ng thumbnails at titles -->
+    <!-- ARTIFACTS VIEW -->
     <div id="artifacts-view" class="archive-container hidden">
         <div class="archive-title">Artifacts Archive</div>
         <div class="archive-subtitle">Ang kumpletong koleksyon ng mga ordinaryong bagay.</div>
@@ -300,8 +351,7 @@
     </div>
 
     <script>
-        // 1. ANG MASTER DATABASE NG MGA ARTIFACTS
-        // Kapag nagdagdag ka ng Exhibit 04 sa hinaharap, ilagay lang sa unahan ng listahang ito.
+        // MASTER DATABASE NG MGA ARTIFACTS (Naka-set sa 0 ang views at likes)
         const allArtifacts = [
             {
                 id: "ARTIFACT #03",
@@ -313,7 +363,10 @@
                 owner: "Taong Laging Overdue sa Deadlines",
                 story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat.",
                 story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction.",
-                notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan."
+                notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan.",
+                audio: "Exhibit_03.mp3",
+                views: 0,
+                likes: 0
             },
             {
                 id: "ARTIFACT #02",
@@ -325,7 +378,10 @@
                 owner: "Anonymous Curator",
                 story1: "Ang mahiwagang kasangkapang ito ay tumutugon sa mga makakati at mahirap abutin na bahagi ng katawan.",
                 story2: "Sa mga sandaling mag-isa ka, ito ang nagbibigay ng agarang ginhawa.",
-                notes: "Isang simpleng sandata para sa malalim na pangangati."
+                notes: "Isang simpleng sandata para sa malalim na pangangati.",
+                audio: "Exhibit_02.mp3",
+                views: 0,
+                likes: 0
             },
             {
                 id: "ARTIFACT #01",
@@ -337,11 +393,13 @@
                 owner: "Lokal na Manlalakbay",
                 story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente at mainit na hapon.",
                 story2: "Hindi ito ang pinakamahalagang kagamitan pero ito ang laging sumasalo sa init.",
-                notes: "Isang ordinaryong sandata laban sa init."
+                notes: "Isang ordinaryong sandata laban sa init.",
+                audio: "lv_0_20260927094255.mp3",
+                views: 0,
+                likes: 0
             }
         ];
 
-        // 2. MANGHIHIRAM ANG HOMEPAGE NG UP TO 3 RECENTS MULA SA MASTER DATABASE
         let homeExhibits = allArtifacts.slice(0, 3);
         let currentIndex = 0;
 
@@ -349,13 +407,22 @@
             if (homeExhibits.length === 0) return;
             const current = homeExhibits[currentIndex];
             
-            // Hanapin ang tamang index sa master database para sa imahe
             const originalIndex = allArtifacts.indexOf(current);
             const imgFilename = "Exhibit 0" + (originalIndex + 1) + ".jpg";
 
             document.getElementById("exhibit-img").src = imgFilename;
             document.getElementById("art-id").innerText = current.id;
             document.getElementById("art-title").innerText = current.title;
+            
+            // Audio source
+            const audioElement = document.getElementById("art-audio");
+            audioElement.src = current.audio;
+            audioElement.load();
+
+            // Ipakita ang views at likes (nagsisimula sa zero)
+            document.getElementById("view-count").innerText = current.views;
+            document.getElementById("like-count").innerText = current.likes;
+
             document.getElementById("meta-date").innerText = current.date;
             document.getElementById("meta-origin").innerText = current.origin;
             document.getElementById("meta-materials").innerText = current.materials;
@@ -373,14 +440,26 @@
             document.getElementById("next-btn").disabled = currentIndex === homeExhibits.length - 1;
         }
 
+        function likeArtifact() {
+            homeExhibits[currentIndex].likes += 1;
+            document.getElementById("like-count").innerText = homeExhibits[currentIndex].likes;
+        }
+
         function changeHomeExhibit(direction) {
+            const audioElement = document.getElementById("art-audio");
+            audioElement.pause();
+
             currentIndex += direction;
             if (currentIndex < 0) currentIndex = 0;
             if (currentIndex >= homeExhibits.length) currentIndex = homeExhibits.length - 1;
+            
+            // Magdaragdag lang ng view kapag binuksan o nilipatan na
+            homeExhibits[currentIndex].views += 1;
+            document.getElementById("view-count").innerText = homeExhibits[currentIndex].views;
+            
             updateHomeDisplay();
         }
 
-        // 3. I-RENDER ANG THUMBNAILS SA ARTIFACTS OPTION
         function renderArtifactsArchive() {
             const grid = document.getElementById("artifacts-grid");
             grid.innerHTML = "";
@@ -396,9 +475,7 @@
                         <div style="font-size: 1.1rem; color: #e8e2d8; margin-top: 5px;">${item.title}</div>
                     </div>
                 `;
-                // Kapag pinindot ang isang artifact sa archive, ibalik siya sa homepage at ipakita ito!
                 card.onclick = function() {
-                    // Hanapin kung nasaan ito sa homeExhibits, kung hindi man ay ilagay sa unahan o direktang i-display
                     const targetIndex = homeExhibits.indexOf(item);
                     if (targetIndex !== -1) {
                         currentIndex = targetIndex;
@@ -412,21 +489,22 @@
             });
         }
 
-        // 4. FUNCTION PARA SA PAGLIPAT NG VIEWS
         function switchView(viewName) {
             const homeView = document.getElementById("home-view");
             const artifactsView = document.getElementById("artifacts-view");
+            const audioElement = document.getElementById("art-audio");
 
             if (viewName === 'home') {
                 homeView.classList.remove('hidden');
                 artifactsView.classList.add('hidden');
             } else if (viewName === 'artifacts') {
+                audioElement.pause();
                 artifactsView.classList.remove('hidden');
                 homeView.classList.add('hidden');
             }
         }
 
-        // Patakbuhin sa simula
+        // Initialize
         updateHomeDisplay();
         renderArtifactsArchive();
     </script>
