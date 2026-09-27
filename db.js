@@ -8,7 +8,19 @@ const MuseumDB = {
         if (stored) {
             return JSON.parse(stored);
         }
-        return [];
+        
+        // Kung walang laman ang localStorage, ibalik ang default artifact na ito para may lumabas sa Homepage!
+        const defaultArtifacts = [
+            {
+                id: "Artifact #01",
+                date: "Circa 2025",
+                title: "Abaniko ni Coco",
+                story1: "Isang lumang abaniko na gawa sa dahon ng saging na ginamit noong kasagsagan ng tag-init. Puno ito ng kwento ng pagpapahinga sa ilalim ng lilim ng punong mangga.",
+                image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=60"
+            }
+        ];
+        this.saveArtifacts(defaultArtifacts);
+        return defaultArtifacts;
     },
 
     saveArtifacts(artifacts) {
@@ -28,14 +40,12 @@ const MuseumDB = {
         localStorage.setItem(this.pendingKey, JSON.stringify(artifacts));
     },
 
-    // Kapag nag-donate, mapupunta muna sa pending list
     addPendingArtifact(newArtifact) {
         const pending = this.getPendingArtifacts();
         pending.unshift(newArtifact);
         this.savePendingArtifacts(pending);
     },
 
-    // Pag-apruba: Ililipat mula pending patungo sa active/approved artifacts na may automatic numbering
     approveArtifact(id) {
         const pending = this.getPendingArtifacts();
         const index = pending.findIndex(a => a.id === id);
@@ -44,8 +54,6 @@ const MuseumDB = {
             this.savePendingArtifacts(pending);
 
             const artifacts = this.getArtifacts();
-            
-            // Awtomatikong magbigay ng sunod-sunod na numero/pangalan (Artifact #01, Artifact #02, ...)
             const nextNumber = artifacts.length + 1;
             const paddedNum = String(nextNumber).padStart(2, '0');
             itemToApprove.autoName = `Artifact #${paddedNum}`;
@@ -55,7 +63,6 @@ const MuseumDB = {
         }
     },
 
-    // Pagtanggi o pag-delete ng pending item
     rejectArtifact(id) {
         const pending = this.getPendingArtifacts();
         const filtered = pending.filter(a => a.id !== id);
