@@ -45,7 +45,7 @@
         }
         .image-container {
             width: 100%;
-            background-color: #000; /* Para maging elegante kung may konting espasyo */
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -55,7 +55,7 @@
             width: 100%;
             height: auto;
             max-height: 600px;
-            object-fit: contain; /* Susi para ipakita ang buong imahe nang walang pinuputol */
+            object-fit: contain; /* Buong naipapakita ang imahe nang walang pinuputol */
             display: block;
         }
         .artifact-content {
@@ -89,6 +89,21 @@
             padding-top: 15px;
             font-size: 13px;
             color: #666;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .share-btn {
+            background: none;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'Times New Roman', serif;
+            font-size: 12px;
+            color: #444;
+        }
+        .share-btn:hover {
+            background: #2c2c2c;
+            color: #fff;
         }
     </style>
 </head>
@@ -117,7 +132,6 @@
             const container = document.getElementById("archives-container");
             const artifacts = getArtifacts();
             
-            // Salain lang ang mga na-approve na item para lumabas sa archives
             const approvedArtifacts = artifacts.filter(item => item.status === "Approved" || !item.status);
 
             if (approvedArtifacts.length === 0) {
@@ -138,11 +152,24 @@
                             <span>👁️ ${item.views || 0} Views</span>
                             <span>❤️ ${item.likes || 0} Likes</span>
                             <span>🎧 ${item.audioName}</span>
+                            <button class="share-btn" onclick="shareArtifact('${item.title}')">Ibahagi (Share)</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         });
+
+        function shareArtifact(title) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: `Tingnan ang kwento ng "${title}" sa Museum of Ordinary Things!`,
+                    url: window.location.href,
+                }).catch((error) => console.log('Error sharing:', error));
+            } else {
+                alert("Hindi suportado ng browser mo ang direktang share. Kopyahin na lamang ang link.");
+            }
+        }
     </script>
 </body>
 </html>
