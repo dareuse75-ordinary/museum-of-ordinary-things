@@ -337,13 +337,13 @@
                 id: "ARTIFACT #01",
                 title: "Ang Paypay ng Tag-init",
                 date: "Circa 2015",
-                origin: "Baler, Aurora",
-                materials: "Bamboo, Fabric, Paper",
+                origin: "Likod ng pinto malapit sa kusina",
+                materials: "Pinagtagpi-tagping karton at patpat ng kawayan",
                 dimensions: "Approx. 35 x 20 cm",
-                owner: "Lokal na Manlalakbay",
-                story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente at mainit na hapon.",
-                story2: "Hindi ito ang pinakamahalagang kagamitan pero ito ang laging sumasalo sa init.",
-                notes: "Isang ordinaryong sandata laban sa init.",
+                owner: "Isang biktima ng rotational brownout",
+                story1: "Isa itong makapangyarihang kasangkapan na ginagamit noong panahong ang tanging aircon ay ang electric fan na nag-iingay lang pero walang ibubuga kundi alikabok.",
+                story2: "Kapag winagayway ito nang mabilis, lumilikha ito ng hangin na may halong pagsisisi kung bakit ka pa pinanganak sa bansang tropikal.",
+                notes: "Huwag gamiting pantakip ng mukha kapag may dumarating na nangungutang.",
                 audio: "Exhibit 01.mp3",
                 image: "Exhibit 01.jpg",
                 views: 5,
@@ -354,13 +354,13 @@
                 id: "ARTIFACT #02",
                 title: "Ang Kamot-Likod",
                 date: "Circa 2018",
-                origin: "Tapat ng Salamin sa Kwarto",
-                materials: "Kahoy at Metal",
+                origin: "Gilid ng patungan sa tabi ng kama",
+                materials: "Purong kahoy na may disenyo ng kamay",
                 dimensions: "Approx. 45 x 3 cm",
-                owner: "Anonymous Curator",
-                story1: "Ang mahiwagang kasangkapang ito ay tumutugon sa mga makakati at mahirap abutin na bahagi ng katawan.",
-                story2: "Sa mga sandaling mag-isa ka, ito ang nagbibigay ng agarang ginhawa.",
-                notes: "Isang simpleng sandata para sa malalim na pangangati.",
+                owner: "Taong may matinding trust issues",
+                story1: "Dinisenyo ito para abutin ang isang partikular na bahagi ng likod mo na kahit anong piga mo sa sarili mo ay hindi mo maabot.",
+                story2: "Nagpapatunay na sa mundong ito, sarili mo lang ang maaasahan mo—lalo na kapag nangati ang gitna ng iyong likod habang mag-isa ka sa dilim.",
+                notes: "Pwede ring gamitin bilang panabog sa ipis kung kinakailangan.",
                 audio: "Exhibit 02.mp3",
                 image: "Exhibit 02.jpg",
                 views: 12,
@@ -371,13 +371,13 @@
                 id: "ARTIFACT #03",
                 title: "Ang Tasang Tagapagtanggol sa Antok",
                 date: "Circa 2021",
-                origin: "Gilid ng Laptop na Puno ng Alikabok",
-                materials: "Ceramic na may bahid ng kape",
+                origin: "Ibabaw ng mesa na tambak ng resibo",
+                materials: "Ceramic na may mantsa ng kape",
                 dimensions: "Approx. 10 x 8 cm",
-                owner: "Taong Laging Overdue sa Deadlines",
-                story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat.",
-                story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction.",
-                notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan.",
+                owner: "Empleyeyadong laging pagod",
+                story1: "Dito nagmumula ang likidong nagbibigay-buhay at nagpapanatili sa iyong katinuan habang kaharap ang boss mong mahilig mag-chat ng 'Hi, quick question' pagpatak ng alas-singke.",
+                story2: "Sinasabing ang lalim ng mantsa sa ilalim ng tasang ito ay sumasalamin sa lalim ng iyong kawalan ng pag-asa sa buhay korporasyon.",
+                notes: "Kung aamuyin mo ito, maaalala mo ang lahat ng mali mong desisyon sa career.",
                 audio: "Exhibit 03.mp3",
                 image: "Exhibit 03.jpg",
                 views: 20,
@@ -392,36 +392,36 @@
             const item = museumDatabase[currentIndex];
 
             document.getElementById("exhibit-img").src = item.image;
-            document.getElementById("art-id").innerText = item.id;
-            document.getElementById("art-title").innerText = item.title;
+            document.getElementById("art-id").textContent = item.id;
+            document.getElementById("art-title").textContent = item.title;
             
             const audioElement = document.getElementById("art-audio");
             audioElement.src = item.audio;
 
-            document.getElementById("view-count").innerText = item.views;
-            document.getElementById("like-count").innerText = item.likes;
+            document.getElementById("view-count").textContent = item.views;
+            document.getElementById("like-count").textContent = item.likes;
 
             const likeBtn = document.getElementById("like-btn");
             if (item.liked) {
                 likeBtn.disabled = true;
-                likeBtn.innerText = "❤️ Liked (" + item.likes + ")";
+                likeBtn.textContent = "❤️ Liked (" + item.likes + ")";
             } else {
                 likeBtn.disabled = false;
-                likeBtn.innerHTML = "❤️ Like (" + item.likes + ")";
+                likeBtn.textContent = "❤️ Like (" + item.likes + ")";
             }
 
-            document.getElementById("meta-date").innerText = item.date;
-            document.getElementById("meta-origin").innerText = item.origin;
-            document.getElementById("meta-materials").innerText = item.materials;
-            document.getElementById("meta-dimensions").innerText = item.dimensions;
-            document.getElementById("meta-owner").innerText = item.owner;
-            document.getElementById("art-story-1").innerText = item.story1;
-            document.getElementById("art-story-2").innerText = item.story2;
-            document.getElementById("art-notes").innerText = item.notes;
+            document.getElementById("meta-date").textContent = item.date;
+            document.getElementById("meta-origin").textContent = item.origin;
+            document.getElementById("meta-materials").textContent = item.materials;
+            document.getElementById("meta-dimensions").textContent = item.dimensions;
+            document.getElementById("meta-owner").textContent = item.owner;
+            document.getElementById("art-story-1").textContent = item.story1;
+            document.getElementById("art-story-2").textContent = item.story2;
+            document.getElementById("art-notes").textContent = item.notes;
             
             const numStr = String(currentIndex + 1).padStart(2, '0');
             const totalStr = String(museumDatabase.length).padStart(2, '0');
-            document.getElementById("counter").innerText = numStr + " / " + totalStr;
+            document.getElementById("counter").textContent = numStr + " / " + totalStr;
         }
 
         function likeArtifact() {
@@ -434,7 +434,9 @@
         }
 
         function changeHomeExhibit(direction) {
-            document.getElementById("art-audio").pause();
+            const audioElement = document.getElementById("art-audio");
+            audioElement.pause();
+            audioElement.currentTime = 0;
 
             currentIndex += direction;
             if (currentIndex < 0) {
@@ -478,7 +480,10 @@
                 homeView.classList.remove('hidden');
                 artifactsView.classList.add('hidden');
             } else if (viewName === 'artifacts') {
-                document.getElementById("art-audio").pause();
+                const audioElement = document.getElementById("art-audio");
+                audioElement.pause();
+                audioElement.currentTime = 0;
+                
                 artifactsView.classList.remove('hidden');
                 homeView.classList.add('hidden');
             }
