@@ -107,7 +107,11 @@
                     url: url,
                 }).catch((error) => console.log('Error:', error));
             } else {
-                copyToClipboard(url);
+                navigator.clipboard.writeText(url).then(() => {
+                    alert("Nakopya na ang link ng artifact sa clipboard!");
+                }).catch(err => {
+                    console.error('Copy error: ', err);
+                });
             }
         }
 
