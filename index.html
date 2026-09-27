@@ -125,8 +125,9 @@
         .image-nav button:hover:not(:disabled) {
             color: #d4af37;
         }
+        /* Mas kitang kulay kapag disabled para alam mong pindutan siya */
         .image-nav button:disabled {
-            color: #383531;
+            color: #4a453f;
             cursor: default;
         }
 
@@ -287,7 +288,8 @@
     <div id="home-view" class="museum-container">
         <div class="left-panel">
             <div class="image-wrapper">
-                <img id="exhibit-img" src="" alt="Artifact Image" onerror="this.src='https://via.placeholder.com/550x400?text=Exhibit+Image'">
+                <!-- Gumamit na tayo ng tamang id para direktang macontrol ang larawan base sa exhibit index -->
+                <img id="exhibit-img" src="" alt="Artifact Image">
             </div>
 
             <!-- Views at Like Button -->
@@ -356,19 +358,21 @@
     </div>
 
     <script>
+        // Ayusin ang pagkakasunod-sunod: Index 0 = Exhibit 01, Index 1 = Exhibit 02, Index 2 = Exhibit 03
         const allArtifacts = [
             {
-                id: "ARTIFACT #03",
-                title: "Ang Tasang Tagapagtanggol sa Antok",
-                date: "Circa 2021",
-                origin: "Gilid ng Laptop na Puno ng Alikabok",
-                materials: "Ceramic na may bahid ng kape",
-                dimensions: "Approx. 10 x 8 cm",
-                owner: "Taong Laging Overdue sa Deadlines",
-                story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat.",
-                story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction.",
-                notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan.",
-                audio: "Exhibit_03.mp3",
+                id: "ARTIFACT #01",
+                title: "Ang Paypay ng Tag-init",
+                date: "Circa 2015",
+                origin: "Baler, Aurora",
+                materials: "Bamboo, Fabric, Paper",
+                dimensions: "Approx. 35 x 20 cm",
+                owner: "Lokal na Manlalakbay",
+                story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente at mainit na hapon.",
+                story2: "Hindi ito ang pinakamahalagang kagamitan pero ito ang laging sumasalo sa init.",
+                notes: "Isang ordinaryong sandata laban sa init.",
+                audio: "lv_0_20260927094255.mp3",
+                image: "Exhibit 01.jpg",
                 views: 0,
                 likes: 0,
                 liked: false
@@ -385,29 +389,31 @@
                 story2: "Sa mga sandaling mag-isa ka, ito ang nagbibigay ng agarang ginhawa.",
                 notes: "Isang simpleng sandata para sa malalim na pangangati.",
                 audio: "Exhibit_02.mp3",
+                image: "Exhibit 02.jpg",
                 views: 0,
                 likes: 0,
                 liked: false
             },
             {
-                id: "ARTIFACT #01",
-                title: "Ang Paypay ng Tag-init",
-                date: "Circa 2015",
-                origin: "Baler, Aurora",
-                materials: "Bamboo, Fabric, Paper",
-                dimensions: "Approx. 35 x 20 cm",
-                owner: "Lokal na Manlalakbay",
-                story1: "Nadaanan na ng simpleng paypay na ito ang mga panahong walang kuryente at mainit na hapon.",
-                story2: "Hindi ito ang pinakamahalagang kagamitan pero ito ang laging sumasalo sa init.",
-                notes: "Isang ordinaryong sandata laban sa init.",
-                audio: "lv_0_20260927094255.mp3",
+                id: "ARTIFACT #03",
+                title: "Ang Tasang Tagapagtanggol sa Antok",
+                date: "Circa 2021",
+                origin: "Gilid ng Laptop na Puno ng Alikabok",
+                materials: "Ceramic na may bahid ng kape",
+                dimensions: "Approx. 10 x 8 cm",
+                owner: "Taong Laging Overdue sa Deadlines",
+                story1: "Ipinagmamalaki nitong tasa ang kanyang natatanging kakayahan na magtimpla ng kape na mas matapang pa sa desisyon mong magpuyat.",
+                story2: "Madalas itong magsilbing ebidensya ng iyong caffeine addiction.",
+                notes: "Babala: Huwag aamuyin ang ilalim kapag nakalimutang hugasan.",
+                audio: "Exhibit_03.mp3",
+                image: "Exhibit 03.jpg",
                 views: 0,
                 likes: 0,
                 liked: false
             }
         ];
 
-        // I-load ang naka-save na likes at liked status mula sa localStorage
+        // I-load ang likes at liked status mula sa localStorage
         allArtifacts.forEach((item, index) => {
             const savedLikes = localStorage.getItem(`artifact_${index}_likes`);
             const savedLikedStatus = localStorage.getItem(`artifact_${index}_liked`);
@@ -420,17 +426,15 @@
             }
         });
 
-        let homeExhibits = allArtifacts.slice(0, 3);
+        let homeExhibits = allArtifacts; // Gagamitin na ang buong listahan nang sunud-sunod
         let currentIndex = 0;
 
         function updateHomeDisplay() {
             if (homeExhibits.length === 0) return;
             const current = homeExhibits[currentIndex];
-            
-            const originalIndex = allArtifacts.indexOf(current);
-            const imgFilename = "Exhibit 0" + (originalIndex + 1) + ".jpg";
 
-            document.getElementById("exhibit-img").src = imgFilename;
+            // Diretso nang kinukuha ang tamang image at data para hindi magkabaliktad
+            document.getElementById("exhibit-img").src = current.image;
             document.getElementById("art-id").innerText = current.id;
             document.getElementById("art-title").innerText = current.title;
             
@@ -463,14 +467,14 @@
             const totalStr = String(homeExhibits.length).padStart(2, '0');
             document.getElementById("counter").innerText = numStr + " / " + totalStr;
 
-            // Dito inaayos ang enabling/disabling ng buttons para gumana ang PREV at NEXT nang maayos
+            // Pag-enable at pag-disable ng PREV at NEXT buttons
             document.getElementById("prev-btn").disabled = (currentIndex === 0);
             document.getElementById("next-btn").disabled = (currentIndex === homeExhibits.length - 1);
         }
 
         function likeArtifact() {
             const current = homeExhibits[currentIndex];
-            const originalIndex = allArtifacts.indexOf(current);
+            const originalIndex = currentIndex; // Magkatugma na sila ngayon
 
             if (!current.liked) {
                 current.likes += 1;
@@ -501,12 +505,11 @@
             const grid = document.getElementById("artifacts-grid");
             grid.innerHTML = "";
 
-            allArtifacts.forEach((item, index) => {
-                const imgNum = allArtifacts.length - index;
+            allArtifacts.forEach((item) => {
                 const card = document.createElement("div");
                 card.className = "thumb-card";
                 card.innerHTML = `
-                    <img src="Exhibit 0${imgNum}.jpg" alt="${item.title}" class="thumb-img" onerror="this.src='https://via.placeholder.com/280x180?text=Exhibit'">
+                    <img src="${item.image}" alt="${item.title}" class="thumb-img" onerror="this.src='https://via.placeholder.com/280x180?text=Exhibit'">
                     <div class="thumb-body">
                         <div class="artifact-id">${item.id}</div>
                         <div style="font-size: 1.1rem; color: #e8e2d8; margin-top: 5px;">${item.title}</div>
@@ -516,8 +519,6 @@
                     const targetIndex = homeExhibits.indexOf(item);
                     if (targetIndex !== -1) {
                         currentIndex = targetIndex;
-                    } else {
-                        currentIndex = 0;
                     }
                     switchView('home');
                     updateHomeDisplay();
