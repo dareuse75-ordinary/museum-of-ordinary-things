@@ -1,158 +1,384 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museum Admin Panel</title>
+    <title>Admin Control - Museum of Ordinary Things</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0c0b0a;
-            --bg-secondary: #121110;
-            --border-color: #22201c;
-            --text-main: #e6dfd5;
-            --text-muted: #999085;
-            --accent: #d4af37;
+            --museum-bg: #F4EFE6;
+            --museum-dark: #1E1B18;
+            --museum-gold: #9E7B43;
+            --museum-card-bg: #FCF9F2;
+            --museum-border: #D8CEBE;
+            --museum-red: #A94442;
+            --museum-green: #3C763D;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg-primary); color: var(--text-main); font-family: "Georgia", serif; }
+
+        body {
+            background-color: var(--museum-bg);
+            color: var(--museum-dark);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
         header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 40px; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+            background-color: var(--museum-bg);
+            border-bottom: 2px solid var(--museum-border);
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .logo { font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
-        .nav-menu { display: flex; gap: 30px; font-size: 0.8rem; letter-spacing: 2px; }
-        .nav-menu a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
-        .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
 
-        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .panel-title { font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 10px; color: var(--accent); }
-        .panel-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px; }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--museum-dark);
+            text-decoration: none;
+        }
 
-        .section-box { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 25px; margin-bottom: 30px; }
-        .section-box h3 { font-size: 1rem; letter-spacing: 1px; color: var(--accent); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
 
-        .artifact-row { display: flex; gap: 15px; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-        .artifact-thumb { width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--border-color); }
-        .artifact-details { flex: 1; min-width: 200px; }
-        .artifact-title { font-size: 1rem; color: #fff; margin-bottom: 4px; }
-        .artifact-id { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--museum-dark);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
 
-        .audio-input-group { width: 100%; display: flex; gap: 10px; margin-top: 10px; }
-        .audio-input { flex: 1; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; font-size: 0.85rem; }
-        
-        .btn { padding: 8px 15px; border: 1px solid var(--accent); color: var(--accent); background: transparent; cursor: pointer; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; transition: 0.3s; }
-        .btn:hover { background: var(--accent); color: var(--bg-primary); }
-        .btn-danger { border-color: #e31b23; color: #e31b23; }
-        .btn-danger:hover { background: #e31b23; color: #fff; }
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--museum-gold);
+        }
 
-        .empty-text { color: var(--text-muted); font-size: 0.85rem; font-style: italic; text-align: center; padding: 20px; }
+        .admin-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-container h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-container p {
+            color: #6B6358;
+            margin-bottom: 2rem;
+        }
+
+        /* Listahan ng mga Artifacts sa Admin Panel */
+        .admin-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .admin-card {
+            background: var(--museum-card-bg);
+            border: 1px solid var(--museum-border);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 150px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .admin-card img {
+            width: 150px;
+            height: 120px;
+            object-fit: cover;
+            border: 1px solid var(--museum-border);
+        }
+
+        .admin-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .admin-info p {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .tags-naming {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--museum-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid var(--museum-border);
+            background: white;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .btn-edit {
+            background: var(--museum-dark);
+            color: white;
+            border-color: var(--museum-dark);
+        }
+
+        .btn-edit:hover {
+            background: var(--museum-gold);
+            border-color: var(--museum-gold);
+        }
+
+        .btn-delete {
+            background: #fff;
+            color: var(--museum-red);
+            border-color: var(--museum-red);
+        }
+
+        .btn-delete:hover {
+            background: var(--museum-red);
+            color: white;
+        }
+
+        /* Modal para sa pag-edit ng Artifact at Google Drive Audio Link */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 27, 24, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--museum-card-bg);
+            border: 1px solid var(--museum-border);
+            padding: 2rem;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .modal-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--museum-border);
+            background: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .form-group textarea {
+            height: 80px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-save {
+            background: var(--museum-dark);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: #ccc;
+            color: black;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .admin-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .admin-card img {
+                margin: 0 auto;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">Museum Admin Panel</div>
-        <div class="nav-menu">
-            <a href="index.html">HOME</a>
-            <a href="artifacts.html">ARCHIVES</a>
-            <a href="exhibitions.html">EXHIBITS</a>
-            <a href="donate.html">DONATE</a>
-            <a href="admin.html" class="active">ADMIN</a>
-        </div>
+        <a href="index.html" class="logo">MUSEUM OF ORDINARY THINGS</a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="artifacts.html">Artifacts Archives</a></li>
+                <li><a href="exhibitions.html">Exhibition</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <div class="container">
-        <h1 class="panel-title">ADMIN CONTROL PANEL</h1>
-        <p class="panel-desc">Pamahalaan ang mga donasyon, lagyan ng voice-over audio ang mga artifact, at ayusin kung saan mapupunta ang mga ito.</p>
+    <div class="admin-container">
+        <h1>Admin Control Panel</h1>
+        <p>Pamahalaan, i-edit ang konteksto, baguhin ang mga pangalan ng larawan, at maglagay ng Google Drive audio links para sa bawat artifact.</p>
 
-        <!-- PENDING DONATIONS SECTION -->
-        <div class="section-box">
-            <h3>1. MGA NAKABINBING DONASYON (PENDING)</h3>
-            <div id="pending-list"></div>
-        </div>
-
-        <!-- ACTIVE ARTIFACTS AUDIO MANAGER SECTION -->
-        <div class="section-box">
-            <h3>2. MGA AKTIBONG ARTIFACT (MAG-INPUT NG VOICE-OVER AUDIO)</h3>
-            <div id="active-artifacts-list"></div>
+        <div class="admin-list" id="adminArtifactsList">
+            <!-- Dito kusang papasok ang mga artifact mula sa db.js -->
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <h2>I-edit ang Artifact</h2>
+            <input type="hidden" id="editIndex">
+            
+            <div class="form-group">
+                <label>Pamagat</label>
+                <input type="text" id="editTitle">
+            </div>
+
+            <div class="form-group">
+                <label>Kwento / Hugot (Artifact.Description)</label>
+                <textarea id="editDescription"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Google Drive Audio Link (Artifact.audio)</label>
+                <input type="text" id="editAudioUrl" placeholder="Ilagay ang shareable link mula sa Google Drive">
+            </div>
+
+            <div class="form-group">
+                <label>Baguhin/Palitan ang Image File URL o Pangalan</label>
+                <input type="text" id="editImageUrl" placeholder="Image URL o File path">
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="saveEditedArtifact()">I-save ang Pagbabago</button>
+                <button class="btn-cancel" onclick="closeEditModal()">Kanselahin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- I-link ang db.js -->
     <script src="db.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            loadPending();
-            loadActiveArtifacts();
-        });
+        // Load at i-display ang mga artifacts sa Admin panel pagbukas ng pahina
+        window.onload = function() {
+            renderAdminPanel();
+        };
 
-        function loadPending() {
-            const pending = MuseumDB.getPendingArtifacts();
-            const container = document.getElementById("pending-list");
-
-            if (pending.length === 0) {
-                container.innerHTML = `<div class="empty-text">Walang nakabinbing donasyon.</div>`;
-                return;
-            }
-
-            container.innerHTML = pending.map(item => `
-                <div class="artifact-row">
-                    <img src="${item.image}" class="artifact-thumb" alt="${item.title}">
-                    <div class="artifact-details">
-                        <div class="artifact-title">${item.title}</div>
-                        <div class="artifact-id">Mula kay: ${item.nagmamayari || 'Anonymous'}</div>
-                    </div>
-                    <button onclick="approve('${item.id}')" class="btn">Aprubahan</button>
-                    <button onclick="reject('${item.id}')" class="btn btn-danger">Tanggihan</button>
-                </div>
-            `).join('');
-        }
-
-        function loadActiveArtifacts() {
-            const artifacts = MuseumDB.getArtifacts();
-            const container = document.getElementById("active-artifacts-list");
+        function renderAdminPanel() {
+            let artifacts = getArtifacts();
+            const container = document.getElementById('adminArtifactsList');
+            container.innerHTML = "";
 
             if (artifacts.length === 0) {
-                container.innerHTML = `<div class="empty-text">Walang nakikitang artifact.</div>`;
+                container.innerHTML = "<p style='text-align:center; color:#6B6358;'>Wala pang nakatalang artifact sa sistema.</p>";
                 return;
             }
 
-            container.innerHTML = artifacts.map(item => `
-                <div class="artifact-row">
-                    <img src="${item.image}" class="artifact-thumb" alt="${item.title}">
-                    <div class="artifact-details">
-                        <div class="artifact-title">${item.title}</div>
-                        <div class="artifact-id">${item.id} &bull; ${item.date}</div>
-                        <div class="audio-input-group">
-                            <input type="text" id="audio-${item.id}" class="audio-input" value="${item.audio || ''}" placeholder="I-paste ang audio link dito (hal. voice.mp3)">
-                            <button onclick="saveAudio('${item.id}')" class="btn">I-save Audio</button>
-                        </div>
+            artifacts.forEach((art, index) => {
+                const card = document.createElement('div');
+                card.className = 'admin-card';
+
+                card.innerHTML = `
+                    <img src="${art.imageUrl}" alt="${art.title}">
+                    <div class="admin-info">
+                        <div class="tags-naming">${art.imageName} | ${art.descriptionName} | ${art.audioName}</div>
+                        <h3>${art.title}</h3>
+                        <p>${art.description}</p>
+                        <p><strong>Audio Link:</strong> ${art.audioUrl ? art.audioUrl : '<i>Wala pang Google Drive audio link</i>'}</p>
                     </div>
-                </div>
-            `).join('');
+                    <div class="admin-actions">
+                        <button class="btn-action btn-edit" onclick="openEditModal(${index})">I-edit / Audio</button>
+                        <button class="btn-action btn-delete" onclick="deleteArtifact(${index})">Tanggalin</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
-        function approve(id) {
-            MuseumDB.approveArtifact(id);
-            loadPending();
-            loadActiveArtifacts();
-            alert("Na-approve na ang artifact!");
+        // Buksan ang modal para sa pag-edit
+        function openEditModal(index) {
+            let artifacts = getArtifacts();
+            let art = artifacts[index];
+
+            document.getElementById('editIndex').value = index;
+            document.getElementById('editTitle').value = art.title;
+            document.getElementById('editDescription').value = art.description;
+            document.getElementById('editAudioUrl').value = art.audioUrl || "";
+            document.getElementById('editImageUrl').value = art.imageUrl || "";
+
+            document.getElementById('editModal').style.display = 'flex';
         }
 
-        function reject(id) {
-            if (confirm("Sigurado ka bang gusto mong tanggihan ang donasyong ito?")) {
-                MuseumDB.rejectArtifact(id);
-                loadPending();
-            }
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
         }
 
-        function saveAudio(id) {
-            const inputVal = document.getElementById(`audio-${id}`).value;
-            const success = MuseumDB.updateArtifactAudio(id, inputVal);
-            if (success) {
-                alert("Matagumpay na na-save ang audio link para sa artifact na ito!");
-            } else {
-                alert("May naganap na error sa pag-save.");
+        // I-save ang mga binagong impormasyon
+        function saveEditedArtifact() {
+            let index = document.getElementById('editIndex').value;
+            let artifacts = getArtifacts();
+
+            artifacts[index].title = document.getElementById('editTitle').value;
+            artifacts[index].description = document.getElementById('editDescription').value;
+            artifacts[index].audioUrl = document.getElementById('editAudioUrl').value;
+            artifacts[index].imageUrl = document.getElementById('editImageUrl').value;
+
+            localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
+            closeEditModal();
+            renderAdminPanel();
+            alert("Matagumpay na na-update ang artifact!");
+        }
+
+        // Tanggalin ang artifact
+        function deleteArtifact(index) {
+            if (confirm("Sigurado ka bang gusto mong tanggalin ang artifact na ito sa museo?")) {
+                let artifacts = getArtifacts();
+                artifacts.splice(index, 1);
+                localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
+                renderAdminPanel();
             }
         }
     </script>

@@ -1,120 +1,45 @@
-const MuseumDB = {
-    storageKey: 'museum_ordinary_things_artifacts_v14',
-    pendingKey: 'museum_ordinary_things_pending_v14',
+// db.js - Mock database at Auto-increment naming function na may suporta sa pag-edit ng image file
 
-    getArtifacts() {
-        const stored = localStorage.getItem(this.storageKey);
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed;
-                }
-            } catch (e) {
-                console.error("Error parsing storage", e);
-            }
-        }
-        
-        const defaultArtifacts = [
-            {
-                id: "Artifact #01",
-                date: "Circa 2025",
-                title: "Abaniko ni Coco",
-                story1: "Binili dahil \"ang cute pang-display.\" Ginamit nang dalawang beses, itinago nang sampung taon, tapos biglang naging antique. Tested sa init ng Baler at sa traffic ng EDSA. Parehong pumasa sa lakas ng hangin.",
-                image: "abaniko.jpg",
-                pinanggalingan: "Baler, Aurora",
-                materyales: "Sawali at Tela",
-                nagmamayari: "Coco",
-                tala: "Paboritong pamaypay sa initan",
-                audio: "", // Dito mapupunta ang Google Drive audio link na ilalagay mo sa admin panel
-                views: 14,
-                likes: 0,
-                liked: false
-            }
-        ];
-        this.saveArtifacts(defaultArtifacts);
-        return defaultArtifacts;
-    },
+function getArtifacts() {
+    let artifacts = JSON.parse(localStorage.getItem('museum_artifacts')) || [];
+    return artifacts;
+}
 
-    saveArtifacts(artifacts) {
-        localStorage.setItem(this.storageKey, JSON.stringify(artifacts));
-    },
+// Function para mag-save ng bagong artifact
+function saveNewArtifact(title, description, imageFileUrl) {
+    let artifacts = getArtifacts();
+    
+    let nextNumber = artifacts.length + 1;
+    let formattedNum = String(nextNumber).padStart(2, '0');
 
-    getPendingArtifacts() {
-        const stored = localStorage.getItem(this.pendingKey);
-        if (stored) {
-            try { return JSON.parse(stored); } catch(e) { return []; }
-        }
-        return [];
-    },
+    let newEntry = {
+        id: nextNumber,
+        imageName: `Artifact.image #${formattedNum}`,
+        imageUrl: imageFileUrl, // Dito nakalagay ang file ng image na pwedeng palitan o i-edit
+        descriptionName: `Artifact.Description #${formattedNum}`,
+        title: title,
+        description: description,
+        audioName: `Artifact.audio #${formattedNum}`,
+        audioUrl: "", // Manual na ilalagay ng Admin galing Google Drive
+        views: 0,
+        likes: 0,
+        status: "Pending"
+    };
 
-    savePendingArtifacts(artifacts) {
-        localStorage.setItem(this.pendingKey, JSON.stringify(artifacts));
-    },
+    artifacts.push(newEntry);
+    localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
+    return formattedNum;
+}
 
-    addPendingArtifact(newArtifact) {
-        const pending = this.getPendingArtifacts();
-        newArtifact.views = 0;
-        newArtifact.likes = 0;
-        newArtifact.liked = false;
-        pending.unshift(newArtifact);
-        this.savePendingArtifacts(pending);
-    },
-
-    approveArtifact(id) {
-        const pending = this.getPendingArtifacts();
-        const index = pending.findIndex(a => a.id === id);
-        if (index !== -1) {
-            const itemToApprove = pending.splice(index, 1)[0];
-            this.savePendingArtifacts(pending);
-
-            const artifacts = this.getArtifacts();
-            const nextNumber = artifacts.length + 1;
-            const paddedNum = String(nextNumber).padStart(2, '0');
-            itemToApprove.autoName = `Artifact #${paddedNum}`;
-            itemToApprove.views = itemToApprove.views || 0;
-            itemToApprove.likes = itemToApprove.likes || 0;
-            itemToApprove.liked = false;
-            itemToApprove.audio = "";
-
-            artifacts.unshift(itemToApprove);
-            this.saveArtifacts(artifacts);
-        }
-    },
-
-    rejectArtifact(id) {
-        const pending = this.getPendingArtifacts();
-        const filtered = pending.filter(a => a.id !== id);
-        this.savePendingArtifacts(filtered);
-    },
-
-    updateArtifactAudio(id, audioLink) {
-        const artifacts = this.getArtifacts();
-        const item = artifacts.find(a => a.id === id || a.title === id);
-        if (item) {
-            item.audio = audioLink;
-            this.saveArtifacts(artifacts);
-            return true;
-        }
-        return false;
-    },
-
-    toggleLike(id) {
-        const artifacts = this.getArtifacts();
-        const item = artifacts.find(a => a.id === id || a.title === id);
-        if (item) {
-            item.liked = !item.liked;
-            item.likes += item.liked ? 1 : -1;
-            this.saveArtifacts(artifacts);
-        }
-    },
-
-    incrementView(id) {
-        const artifacts = this.getArtifacts();
-        const item = artifacts.find(a => a.id === id || a.title === id);
-        if (item) {
-            item.views = (item.views || 0) + 1;
-            this.saveArtifacts(artifacts);
-        }
+// Function para ma-update/ma-edit ng Admin o sa Donate ang image file at iba pang detalye
+function updateArtifactImage(id, newImageFileUrl) {
+    let artifacts = getArtifacts();
+    let index = artifacts.findIndex(item => item.id === id);
+    
+    if (index !== -1) {
+        artifacts[index].imageUrl = newImageFileUrl;
+        localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
+        return true;
     }
-};
+    return false;
+}
