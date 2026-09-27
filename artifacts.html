@@ -4,439 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artifacts Archives - Museum of Ordinary Things</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --museum-bg: #F4EFE6;
-            --museum-dark: #1E1B18;
-            --museum-gold: #9E7B43;
-            --museum-card-bg: #FCF9F2;
-            --museum-border: #D8CEBE;
-            --museum-muted: #6B6358;
-        }
-
         body {
-            background-color: var(--museum-bg);
-            color: var(--museum-dark);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Times New Roman', serif;
+            background-color: #f4f1ea;
+            color: #2c2c2c;
             margin: 0;
             padding: 0;
         }
-
         header {
-            background-color: var(--museum-bg);
-            border-bottom: 2px solid var(--museum-border);
-            padding: 1.5rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--museum-dark);
-            text-decoration: none;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: var(--museum-dark);
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.95rem;
-        }
-
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--museum-gold);
-        }
-
-        .archives-container {
-            max-width: 1100px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        .archives-header {
             text-align: center;
-            margin-bottom: 3rem;
+            padding: 40px 20px 20px;
         }
-
-        .archives-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .archives-header p {
-            color: var(--museum-muted);
-        }
-
-        /* Grid ng Thumbnails */
-        .archives-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .archive-card {
-            background: var(--museum-card-bg);
-            border: 1px solid var(--museum-border);
-            padding: 12px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(30, 27, 24, 0.03);
-        }
-
-        .archive-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(30, 27, 24, 0.08);
-            border-color: var(--museum-gold);
-        }
-
-        .archive-thumbnail {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border: 1px solid var(--museum-border);
-            margin-bottom: 1rem;
-        }
-
-        .archive-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--museum-dark);
-            text-align: center;
-        }
-
-        .archive-meta {
-            font-size: 0.75rem;
-            text-transform: uppercase;
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
             letter-spacing: 1px;
-            color: var(--museum-gold);
-            text-align: center;
-            margin-bottom: 0.5rem;
         }
-
-        /* Modal / Detalyadong Pahina kapag pinindot ang Thumbnail */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        nav a:hover {
+            color: #000;
+        }
+        h1.title {
+            text-align: center;
+            font-size: 32px;
+            margin-top: 30px;
+            letter-spacing: 2px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .artifact-card {
+            background: #ffffff;
+            border: 1px solid #e0dbce;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .image-container {
             width: 100%;
-            height: 100%;
-            background: rgba(30, 27, 24, 0.7);
+            background-color: #000; /* Para maging elegante kung may konting espasyo */
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2000;
-            padding: 2rem;
+            overflow: hidden;
         }
-
-        .modal-content {
-            background: var(--museum-card-bg);
-            border: 1px solid var(--museum-border);
-            max-width: 800px;
+        .artifact-card img {
             width: 100%;
-            padding: 2.5rem;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            height: auto;
+            max-height: 600px;
+            object-fit: contain; /* Susi para ipakita ang buong imahe nang walang pinuputol */
+            display: block;
         }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--museum-dark);
+        .artifact-content {
+            padding: 30px;
         }
-
-        .modal-body-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
+        .artifact-meta {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
-
-        .modal-image img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border: 1px solid var(--museum-border);
+        .artifact-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #1a1a1a;
         }
-
-        .modal-details h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .modal-details p {
-            color: var(--museum-muted);
+        .artifact-description {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #444;
             font-style: italic;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            margin-bottom: 25px;
         }
-
-        /* Controls sa loob ng Modal */
-        .artifact-controls {
-            border-top: 1px solid var(--museum-border);
-            padding-top: 1rem;
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .stats-and-audio {
+        .artifact-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .like-btn {
-            background: transparent;
-            border: 1px solid var(--museum-border);
-            padding: 0.4rem 0.8rem;
-            cursor: pointer;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.85rem;
-            color: var(--museum-dark);
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s ease;
-        }
-
-        .like-btn.liked {
-            background-color: var(--museum-gold);
-            color: white;
-            border-color: var(--museum-gold);
-        }
-
-        .audio-btn {
-            background-color: var(--museum-dark);
-            color: var(--museum-bg);
-            border: none;
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            letter-spacing: 1px;
-        }
-
-        .audio-btn:hover {
-            background-color: var(--museum-gold);
-        }
-
-        .share-section {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: var(--museum-muted);
-        }
-
-        .share-links a {
-            color: var(--museum-dark);
-            text-decoration: none;
-            padding: 0.2rem 0.5rem;
-            border: 1px solid var(--museum-border);
-            font-size: 0.8rem;
-        }
-
-        .share-links a:hover {
-            background-color: var(--museum-gold);
-            color: white;
-            border-color: var(--museum-gold);
-        }
-
-        @media (max-width: 768px) {
-            .modal-body-grid {
-                grid-template-columns: 1fr;
-            }
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            font-size: 13px;
+            color: #666;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="index.html" class="logo">MUSEUM OF ORDINARY THINGS</a>
+        <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;">MUSEUM OF ORDINARY THINGS</div>
         <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="artifacts.html" class="active">Artifacts Archives</a></li>
-                <li><a href="exhibitions.html">Exhibition</a></li>
-                <li><a href="donate.html">Donate</a></li>
-                <li><a href="admin.html">Admin</a></li>
-            </ul>
+            <a href="index.html">HOME</a>
+            <a href="artifacts.html">ARTIFACTS ARCHIVES</a>
+            <a href="exhibition.html">EXHIBITION</a>
+            <a href="donate.html">DONATE</a>
+            <a href="admin.html">ADMIN</a>
         </nav>
     </header>
 
-    <div class="archives-container">
-        <div class="archives-header">
-            <h1>Artifacts Archives</h1>
-            <p>Ito ang imbakan ng lahat ng mga bagay na naambag. Piliin at pindutin ang anumang thumbnail upang buksan ang mga detalye at kwento.</p>
-        </div>
+    <h1 class="title">Artifacts Archives</h1>
 
-        <!-- Grid ng mga Thumbnails -->
-        <div class="archives-grid" id="archivesGrid">
-            <!-- Kusang mapupuno galing sa db.js -->
-        </div>
+    <div class="container" id="archives-container">
+        <!-- Dito kusang papasok ang mga approved artifacts mula sa database -->
     </div>
 
-    <!-- Modal para sa Buong Detalye (Artifact Detail View) -->
-    <div class="modal" id="artifactModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <div class="modal-body-grid">
-                <div class="modal-image">
-                    <img id="modalImg" src="" alt="Artifact Image">
-                </div>
-                <div class="modal-details">
-                    <div class="archive-meta" id="modalNaming">Artifact.image #00 | Description</div>
-                    <h2 id="modalTitle">Pamagat</h2>
-                    <p id="modalDesc">Kwento o Hugot...</p>
-
-                    <div class="artifact-controls">
-                        <div class="stats-and-audio">
-                            <span id="modalViews">👁️ 0 Views</span>
-                            <button class="like-btn" id="modalLikeBtn" onclick="handleLike()">
-                                ❤️ <span id="modalLikeCount">0</span> Likes
-                            </button>
-                            <button class="audio-btn" id="modalAudioBtn" onclick="playAudio()">🔊 Pakinggan ang Audio</button>
-                        </div>
-
-                        <div class="share-section">
-                            <span>Ibahagi:</span>
-                            <div class="share-links">
-                                <a href="#" onclick="shareArtifact('facebook')">Facebook</a>
-                                <a href="#" onclick="shareArtifact('twitter')">X</a>
-                                <a href="#" onclick="shareArtifact('copy')">Kopyahin</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- I-link ang db.js -->
     <script src="db.js"></script>
     <script>
-        let currentArtifactIndex = null;
-        let userHasLikedMap = {}; // Para mamonitor kung sino ang nag-like na (once only per session)
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById("archives-container");
+            const artifacts = getArtifacts();
+            
+            // Salain lang ang mga na-approve na item para lumabas sa archives
+            const approvedArtifacts = artifacts.filter(item => item.status === "Approved" || !item.status);
 
-        window.onload = function() {
-            loadArchivesGrid();
-        };
-
-        function loadArchivesGrid() {
-            let artifacts = getArtifacts();
-            const grid = document.getElementById('archivesGrid');
-            grid.innerHTML = "";
-
-            if (artifacts.length === 0) {
-                grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--museum-muted);'>Wala pang mga artifact sa archives. Mag-donate na sa 'Donate' tab!</p>";
+            if (approvedArtifacts.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #777;">Wala pang naka-archive na artifact sa ngayon.</p>`;
                 return;
             }
 
-            artifacts.forEach((art, index) => {
-                const card = document.createElement('div');
-                card.className = 'archive-card';
-                card.onclick = () => openModal(index);
-
-                card.innerHTML = `
-                    <div class="archive-meta">${art.imageName}</div>
-                    <img src="${art.imageUrl}" alt="${art.title}" class="archive-thumbnail">
-                    <div class="archive-title">${art.title}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function openModal(index) {
-            let artifacts = getArtifacts();
-            let art = artifacts[index];
-            currentArtifactIndex = index;
-
-            // Dagdagan ng 1 ang views kapag binuksan
-            art.views = (art.views || 0) + 1;
-            artifacts[index] = art;
-            localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
-
-            // I-populate ang modal
-            document.getElementById('modalImg').src = art.imageUrl;
-            document.getElementById('modalTitle').textContent = art.title;
-            document.getElementById('modalDesc').textContent = art.description;
-            document.getElementById('modalNaming').textContent = `${art.imageName} | ${art.descriptionName}`;
-            document.getElementById('modalViews').textContent = `👁️ ${art.views} Views`;
-            document.getElementById('modalLikeCount').textContent = art.likes || 0;
-
-            // Suriin kung na-like na ng user ngayong session
-            const likeBtn = document.getElementById('modalLikeBtn');
-            if (userHasLikedMap[index]) {
-                likeBtn.classList.add('liked');
-            } else {
-                likeBtn.classList.remove('liked');
-            }
-
-            document.getElementById('artifactModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('artifactModal').style.display = 'none';
-            loadArchivesGrid(); // I-refresh ang grid para sa updated views
-        }
-
-        // Like function na one-time lang pwedeng pindutin
-        function handleLike() {
-            let artifacts = getArtifacts();
-            let art = artifacts[currentArtifactIndex];
-            const likeBtn = document.getElementById('modalLikeBtn');
-
-            if (!userHasLikedMap[currentArtifactIndex]) {
-                art.likes = (art.likes || 0) + 1;
-                userHasLikedMap[currentArtifactIndex] = true;
-                likeBtn.classList.add('liked');
-            } else {
-                art.likes = Math.max(0, (art.likes || 1) - 1);
-                userHasLikedMap[currentArtifactIndex] = false;
-                likeBtn.classList.remove('liked');
-            }
-
-            artifacts[currentArtifactIndex] = art;
-            localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
-            document.getElementById('modalLikeCount').textContent = art.likes;
-        }
-
-        function playAudio() {
-            let artifacts = getArtifacts();
-            let art = artifacts[currentArtifactIndex];
-
-            if (art.audioUrl) {
-                alert(`Binubuksan ang Google Drive audio para sa ${art.audioName}...`);
-                window.open(art.audioUrl, '_blank');
-            } else {
-                alert("Wala pang inilalagay na Google Drive audio link ang Admin para sa artifact na ito.");
-            }
-        }
-
-        function shareArtifact(platform) {
-            alert(`Naibahagi na ang artifact sa ${platform}!`);
-        }
+            container.innerHTML = approvedArtifacts.map(item => `
+                <div class="artifact-card">
+                    <div class="image-container">
+                        <img src="${item.imageUrl}" alt="${item.title}">
+                    </div>
+                    <div class="artifact-content">
+                        <div class="artifact-meta">${item.imageName} | ${item.descriptionName}</div>
+                        <div class="artifact-title">${item.title}</div>
+                        <div class="artifact-description">${item.description}</div>
+                        <div class="artifact-footer">
+                            <span>👁️ ${item.views || 0} Views</span>
+                            <span>❤️ ${item.likes || 0} Likes</span>
+                            <span>🎧 ${item.audioName}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        });
     </script>
 </body>
 </html>
