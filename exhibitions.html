@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum of Ordinary Things - Exhibitions</title>
+    <style>
+        :root {
+            --bg-primary: #0c0b0a;
+            --bg-secondary: #121110;
+            --border-color: #22201c;
+            --text-main: #e6dfd5;
+            --text-muted: #999085;
+            --accent: #d4af37;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-primary); color: var(--text-main); font-family: "Georgia", serif; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
+        .nav-menu { display: flex; gap: 30px; font-size: 0.8rem; letter-spacing: 2px; }
+        .nav-menu a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        .title { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; color: #f5f0eb; }
+        .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 40px; }
+
+        .exhibit-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .exhibit-card { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 30px; display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: center; }
+        .exhibit-img { width: 100%; height: 200px; object-fit: cover; filter: grayscale(15%); }
+        .exhibit-info h2 { font-size: 1.25rem; margin-bottom: 10px; color: #f5f0eb; }
+        .exhibit-info p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px; }
+        .tag { font-size: 0.75rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Museum of Ordinary Things</div>
+        <div class="nav-menu">
+            <a href="index.html">HOME</a>
+            <a href="artifacts.html">ARCHIVES</a>
+            <a href="exhibitions.html" class="active">EXHIBITS</a>
+            <a href="donate.html">DONATE</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="title">Mga Natatanging Eksibit</div>
+        <div class="subtitle">Koleksyon ng mga temang nagbibigay-diin sa simpleng pamumuhay.</div>
+
+        <div class="exhibit-grid">
+            <div class="exhibit-card">
+                <img src="https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=600&q=80" class="exhibit-img" alt="Exhibit">
+                <div class="exhibit-info">
+                    <span class="tag">Koleksyon 01</span>
+                    <h2>Mga Bakas ng Pagmamadali</h2>
+                    <p>Isang pagtitipon ng mga gamit na naiwan, nalaglag, o nakalimutan sa mga pampublikong sasakyan at lansangan ng siyudad.</p>
+                </div>
+            </div>
+            <div class="exhibit-card">
+                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" class="exhibit-img" alt="Exhibit">
+                <div class="exhibit-info">
+                    <span class="tag">Koleksyon 02</span>
+                    <h2>Tahanan at Alaala</h2>
+                    <p>Mga simpleng bagay sa loob ng kusina at sala na saksi sa mga tahimik na gabi at tawanan ng pamilya.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

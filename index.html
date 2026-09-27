@@ -5,492 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museum of Ordinary Things</title>
     <style>
-        body {
-            background-color: #0c0b0a;
-            color: #d6cfc7;
-            font-family: serif;
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg-primary: #0c0b0a;
+            --bg-secondary: #121110;
+            --border-color: #22201c;
+            --text-main: #e6dfd5;
+            --text-muted: #999085;
+            --accent: #d4af37;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-primary); color: var(--text-main); font-family: "Georgia", serif; }
+
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 40px;
-            border-bottom: 1px solid #1a1917;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
         }
-        .logo {
-            font-weight: normal;
-            letter-spacing: 3px;
-            cursor: pointer;
-        }
-        .nav-menu {
-            display: flex;
-            gap: 30px;
-        }
-        .nav-menu span {
-            color: #a8a095;
-            cursor: pointer;
-            letter-spacing: 2px;
-        }
-        .nav-menu span:hover, .logo:hover {
-            color: #d6cfc7;
-        }
-        
-        .museum-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: calc(100vh - 80px);
-        }
+        .logo { font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
+        .nav-menu { display: flex; gap: 30px; font-size: 0.8rem; letter-spacing: 2px; }
+        .nav-menu a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
 
-        .left-panel {
-            background-color: #121110;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            position: relative;
-            border-right: 1px solid #1a1917;
-        }
-        .image-wrapper {
-            width: 100%;
-            max-width: 550px;
-            text-align: center;
-        }
-        .image-wrapper img {
-            width: 100%;
-            height: auto;
-            border-radius: 2px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .hero { text-align: center; margin-bottom: 50px; }
+        .hero h1 { font-size: 2rem; letter-spacing: 3px; margin-bottom: 15px; color: #f5f0eb; }
+        .hero p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 600px; margin: 0 auto; }
 
-        .exhibit-interactive-footer {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 550px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: #a8a095;
-            border-top: 1px solid #1a1917;
-            padding-top: 15px;
-        }
-        .action-btn {
-            background: none;
-            border: 1px solid #383531;
-            color: #d6cfc7;
-            padding: 5px 12px;
-            cursor: pointer;
-            font-family: serif;
-            letter-spacing: 1px;
-        }
-        .action-btn:hover {
-            background: #d6cfc7;
-            color: #0c0b0a;
-        }
+        .featured-card { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 30px; margin-bottom: 40px; }
+        .featured-img { width: 100%; height: 400px; object-fit: cover; margin-bottom: 25px; filter: grayscale(20%); }
+        .meta-info { font-size: 0.75rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+        .title { font-size: 1.6rem; letter-spacing: 1px; margin-bottom: 15px; }
+        .desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px; }
 
-        .image-nav {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 550px;
-            margin-top: 25px;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            color: #8c857b;
-        }
-        .image-nav button {
-            background: none;
-            border: none;
-            color: #d6cfc7;
-            font-family: serif;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-        .image-nav button:hover {
-            color: #d4af37;
-        }
-
-        .right-panel {
-            padding: 60px 50px;
-            overflow-y: auto;
-            max-height: calc(100vh - 80px);
-        }
-        .artifact-id {
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            color: #a8a095;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .artifact-title {
-            font-size: 2.5rem;
-            font-weight: normal;
-            line-height: 1.2;
-            color: #e8e2d8;
-            margin-bottom: 25px;
-            font-family: serif;
-        }
-        
-        .audio-container {
-            margin-bottom: 30px;
-            width: 100%;
-        }
-        .audio-container audio {
-            width: 100%;
-            accent-color: #d4af37;
-        }
-
-        .metadata-grid {
-            display: grid;
-            grid-template-columns: 130px 1fr;
-            row-gap: 12px;
-            font-size: 0.9rem;
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #1f1d1a;
-        }
-        .meta-label {
-            color: #8c857b;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-        }
-        .meta-value {
-            color: #d6cfc7;
-        }
-
-        .section-heading {
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: #a8a095;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        .story-section {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #1f1d1a;
-        }
-        .story-text {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #c5bdb2;
-            margin-bottom: 15px;
-        }
-        .museum-notes-section {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #a8a095;
-            font-style: italic;
-        }
-
-        .archive-container {
-            padding: 50px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .archive-title {
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            color: #e8e2d8;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .archive-subtitle {
-            font-size: 0.9rem;
-            color: #8c857b;
-            margin-bottom: 40px;
-        }
-        .archive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-        .thumb-card {
-            background-color: #121110;
-            border: 1px solid #1a1917;
-            border-radius: 2px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .thumb-card:hover {
-            border-color: #d4af37;
-        }
-        .thumb-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-        .thumb-body {
-            padding: 20px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @media (max-width: 900px) {
-            .museum-container {
-                grid-template-columns: 1fr;
-            }
-            header {
-                padding: 20px;
-            }
-            .nav-menu {
-                display: none;
-            }
-            .right-panel {
-                padding: 30px 20px;
-                max-height: none;
-            }
-        }
+        .btn { display: inline-block; padding: 10px 20px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
+        .btn:hover { background: var(--accent); color: var(--bg-primary); }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="switchView('home')">MUSEUM OF ORDINARY THINGS</div>
+        <div class="logo">Museum of Ordinary Things</div>
         <div class="nav-menu">
-            <span onclick="switchView('home')">EXHIBITIONS</span>
-            <span onclick="switchView('artifacts')">ARTIFACTS</span>
-            <span>ABOUT</span>
-            <span>DONATE AN ARTIFACT</span>
+            <a href="index.html" class="active">HOME</a>
+            <a href="artifacts.html">ARCHIVES</a>
+            <a href="exhibitions.html">EXHIBITS</a>
+            <a href="donate.html">DONATE</a>
         </div>
     </header>
 
-    <!-- HOME VIEW -->
-    <div id="home-view" class="museum-container">
-        <div class="left-panel">
-            <div class="image-wrapper">
-                <img id="exhibit-img" src="" alt="Artifact Image">
-            </div>
-
-            <div class="exhibit-interactive-footer">
-                <div>👁️ Views: <span id="view-count">0</span></div>
-                <div>
-                    <button id="like-btn" class="action-btn" onclick="likeArtifact()">❤️ Like (<span id="like-count">0</span>)</button>
-                </div>
-            </div>
-
-            <div class="image-nav">
-                <button onclick="changeHomeExhibit(-1)">&lang; PREV</button>
-                <span id="counter">01 / 03</span>
-                <button onclick="changeHomeExhibit(1)">NEXT &rang;</button>
-            </div>
+    <div class="container">
+        <div class="hero">
+            <h1>Tahanan ng mga Kwento</h1>
+            <p>Isang silid-aklatan para sa mga bagay na walang pangalan, nawalan ng silbi, ngunit puno ng alaala.</p>
         </div>
 
-        <div class="right-panel">
-            <div id="art-id" class="artifact-id"></div>
-            <h1 id="art-title" class="artifact-title"></h1>
-
-            <div class="audio-container">
-                <audio id="art-audio" controls></audio>
-            </div>
-
-            <div class="metadata-grid">
-                <div class="meta-label">Date</div>
-                <div id="meta-date" class="meta-value"></div>
-
-                <div class="meta-label">Origin</div>
-                <div id="meta-origin" class="meta-value"></div>
-
-                <div class="meta-label">Materials</div>
-                <div id="meta-materials" class="meta-value"></div>
-
-                <div class="meta-label">Dimensions</div>
-                <div id="meta-dimensions" class="meta-value"></div>
-
-                <div class="meta-label">Owner</div>
-                <div id="meta-owner" class="meta-value"></div>
-            </div>
-
-            <div class="story-section">
-                <div class="section-heading">The Story</div>
-                <div id="art-story-1" class="story-text"></div>
-                <div id="art-story-2" class="story-text"></div>
-            </div>
-
-            <div class="museum-notes-section">
-                <div class="section-heading">Museum Notes</div>
-                <div id="art-notes"></div>
-            </div>
-        </div>
+        <div id="featured-container"></div>
     </div>
 
-    <!-- ARTIFACTS VIEW -->
-    <div id="artifacts-view" class="archive-container hidden">
-        <div class="archive-title">Artifacts Archive</div>
-        <div class="archive-subtitle">Ang kumpletong koleksyon ng mga ordinaryong bagay.</div>
-        <div id="artifacts-grid" class="archive-grid"></div>
-    </div>
-
+    <script src="db.js"></script>
     <script>
-        const museumDatabase = [
-            {
-                id: "ARTIFACT #01",
-                title: "Ang Paypay ng Tag-init",
-                date: "Circa 2015",
-                origin: "Likod ng pinto malapit sa kusina",
-                materials: "Pinagtagpi-tagping karton at patpat ng kawayan",
-                dimensions: "Approx. 35 x 20 cm",
-                owner: "Isang biktima ng rotational brownout",
-                story1: "Isa itong makapangyarihang kasangkapan na ginagamit noong panahong ang tanging aircon ay ang electric fan na nag-iingay lang pero walang ibubuga kundi alikabok.",
-                story2: "Kapag winagayway ito nang mabilis, lumilikha ito ng hangin na may halong pagsisisi kung bakit ka pa pinanganak sa bansang tropikal.",
-                notes: "Huwag gamiting pantakip ng mukha kapag may dumarating na nangungutang.",
-                audio: "Exhibit 01.mp3",
-                image: "Exhibit 01.jpg",
-                views: 5,
-                likes: 1,
-                liked: false
-            },
-            {
-                id: "ARTIFACT #02",
-                title: "Ang Kamot-Likod ng Nag-iisa",
-                date: "Circa 2018",
-                origin: "Gilid ng patungan sa tabi ng kama",
-                materials: "Purong kahoy na may disenyo ng kamay",
-                dimensions: "Approx. 45 x 3 cm",
-                owner: "Taong may matinding trust issues",
-                story1: "Dinisenyo ito para abutin ang isang partikular na bahagi ng likod mo na kahit anong piga mo sa sarili mo ay hindi mo maabot.",
-                story2: "Nagpapatunay na sa mundong ito, sarili mo lang ang maaasahan mo—lalo na kapag nangati ang gitna ng iyong likod habang mag-isa ka sa dilim.",
-                notes: "Pwede ring gamitin bilang panabog sa ipis kung kinakailangan.",
-                audio: "Exhibit 02.mp3",
-                image: "Exhibit 02.jpg",
-                views: 12,
-                likes: 3,
-                liked: false
-            },
-            {
-                id: "ARTIFACT #03",
-                title: "Ang Tasang Tagapagtanggol sa Antok",
-                date: "Circa 2021",
-                origin: "Ibabaw ng mesa na tambak ng resibo",
-                materials: "Ceramic na may mantsa ng kape",
-                dimensions: "Approx. 10 x 8 cm",
-                owner: "Empleyadong laging pagod",
-                story1: "Dito nagmumula ang likidong nagbibigay-buhay at nagpapanatili sa iyong katinuan habang kaharap ang boss mong mahilig mag-chat ng 'Hi, quick question' pagpatak ng alas-singke.",
-                story2: "Sinasabing ang lalim ng mantsa sa ilalim ng tasang ito ay sumasalamin sa lalim ng iyong kawalan ng pag-asa sa buhay korporasyon.",
-                notes: "Kung aamuyin mo ito, maaalala mo ang lahat ng mali mong desisyon sa career.",
-                audio: "Exhibit 03.mp3",
-                image: "Exhibit 03.jpg",
-                views: 20,
-                likes: 7,
-                liked: false
-            }
-        ];
+        const artifacts = MuseumDB.getArtifacts();
+        const featured = artifacts[0];
 
-        let currentIndex = 0;
-
-        function updateHomeDisplay() {
-            const item = museumDatabase[currentIndex];
-
-            document.getElementById("exhibit-img").src = item.image;
-            document.getElementById("art-id").textContent = item.id;
-            document.getElementById("art-title").textContent = item.title;
-            
-            const audioElement = document.getElementById("art-audio");
-            audioElement.src = item.audio;
-
-            document.getElementById("view-count").textContent = item.views;
-            document.getElementById("like-count").textContent = item.likes;
-
-            const likeBtn = document.getElementById("like-btn");
-            if (item.liked) {
-                likeBtn.disabled = true;
-                likeBtn.textContent = "❤️ Liked (" + item.likes + ")";
-            } else {
-                likeBtn.disabled = false;
-                likeBtn.textContent = "❤️ Like (" + item.likes + ")";
-            }
-
-            document.getElementById("meta-date").textContent = item.date;
-            document.getElementById("meta-origin").textContent = item.origin;
-            document.getElementById("meta-materials").textContent = item.materials;
-            document.getElementById("meta-dimensions").textContent = item.dimensions;
-            document.getElementById("meta-owner").textContent = item.owner;
-            document.getElementById("art-story-1").textContent = item.story1;
-            document.getElementById("art-story-2").textContent = item.story2;
-            document.getElementById("art-notes").textContent = item.notes;
-            
-            const numStr = String(currentIndex + 1).padStart(2, '0');
-            const totalStr = String(museumDatabase.length).padStart(2, '0');
-            document.getElementById("counter").textContent = numStr + " / " + totalStr;
+        if (featured) {
+            document.getElementById("featured-container").innerHTML = `
+                <div class="featured-card">
+                    <img src="${featured.image}" class="featured-img" alt="${featured.title}">
+                    <div class="meta-info">${featured.id} &bull; ${featured.date}</div>
+                    <h2 class="title">${featured.title}</h2>
+                    <p class="desc">${featured.story1}</p>
+                    <a href="artifacts.html" class="btn">Tingnan sa Archives</a>
+                </div>
+            `;
         }
-
-        function likeArtifact() {
-            const item = museumDatabase[currentIndex];
-            if (!item.liked) {
-                item.likes += 1;
-                item.liked = true;
-                updateHomeDisplay();
-            }
-        }
-
-        function changeHomeExhibit(direction) {
-            const audioElement = document.getElementById("art-audio");
-            audioElement.pause();
-            audioElement.currentTime = 0;
-
-            currentIndex += direction;
-            if (currentIndex < 0) {
-                currentIndex = museumDatabase.length - 1;
-            } else if (currentIndex >= museumDatabase.length) {
-                currentIndex = 0;
-            }
-            
-            museumDatabase[currentIndex].views += 1;
-            updateHomeDisplay();
-        }
-
-        function renderArtifactsArchive() {
-            const grid = document.getElementById("artifacts-grid");
-            grid.innerHTML = "";
-
-            museumDatabase.forEach((item, index) => {
-                const card = document.createElement("div");
-                card.className = "thumb-card";
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title}" class="thumb-img" onerror="this.src='https://via.placeholder.com/280x180?text=Exhibit'">
-                    <div class="thumb-body">
-                        <div class="artifact-id">${item.id}</div>
-                        <div style="font-size: 1.1rem; color: #e8e2d8; margin-top: 5px;">${item.title}</div>
-                    </div>
-                `;
-                card.onclick = function() {
-                    currentIndex = index;
-                    switchView('home');
-                    updateHomeDisplay();
-                };
-                grid.appendChild(card);
-            });
-        }
-
-        function switchView(viewName) {
-            const homeView = document.getElementById("home-view");
-            const artifactsView = document.getElementById("artifacts-view");
-            
-            if (viewName === 'home') {
-                homeView.classList.remove('hidden');
-                artifactsView.classList.add('hidden');
-            } else if (viewName === 'artifacts') {
-                const audioElement = document.getElementById("art-audio");
-                audioElement.pause();
-                audioElement.currentTime = 0;
-                
-                artifactsView.classList.remove('hidden');
-                homeView.classList.add('hidden');
-            }
-        }
-
-        updateHomeDisplay();
-        renderArtifactsArchive();
     </script>
 </body>
 </html>

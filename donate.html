@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum of Ordinary Things - Donate</title>
+    <style>
+        :root {
+            --bg-primary: #0c0b0a;
+            --bg-secondary: #121110;
+            --border-color: #22201c;
+            --text-main: #e6dfd5;
+            --text-muted: #999085;
+            --accent: #d4af37;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-primary); color: var(--text-main); font-family: "Georgia", serif; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; }
+        .nav-menu { display: flex; gap: 30px; font-size: 0.8rem; letter-spacing: 2px; }
+        .nav-menu a { color: var(--text-muted); text-decoration: none; transition: 0.3s; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--accent); }
+
+        .container { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+        .title { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; color: #f5f0eb; }
+        .subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px; }
+
+        form { background-color: var(--bg-secondary); border: 1px solid var(--border-color); padding: 40px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        input[type="text"], textarea, select, input[type="file"] { width: 100%; padding: 10px 12px; background: #080706; border: 1px solid var(--border-color); color: var(--text-main); font-family: inherit; font-size: 0.95rem; }
+        input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--accent); outline: none; }
+        input[type="file"] { padding: 8px; cursor: pointer; }
+        textarea { resize: vertical; height: 100px; }
+
+        .submit-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 12px 25px; cursor: pointer; font-family: inherit; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; transition: 0.3s; width: 100%; margin-top: 10px; }
+        .submit-btn:hover { background: var(--accent); color: var(--bg-primary); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Museum of Ordinary Things</div>
+        <div class="nav-menu">
+            <a href="index.html">HOME</a>
+            <a href="artifacts.html">ARCHIVES</a>
+            <a href="exhibitions.html">EXHIBITS</a>
+            <a href="donate.html" class="active">DONATE</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="title">Mag-donate ng Artifact</div>
+        <div class="subtitle">Pumili ng larawan mula sa iyong gallery at isumite para sa pagsusuri ng admin.</div>
+
+        <form onsubmit="DonateApp.submitForm(event)">
+            <div class="form-group">
+                <label>Piliin ang Eksibit (Collection)</label>
+                <select id="d-exhibit" required>
+                    <option value="exhibit1">Koleksyon 01: Mga Bakas ng Pagmamadali</option>
+                    <option value="exhibit2">Koleksyon 02: Tahanan at Alaala</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Pamagat ng Artifact</label>
+                <input type="text" id="d-title" required placeholder="Hal. Ang sirang payong">
+            </div>
+            <div class="form-group">
+                <label>Petsa o Taon</label>
+                <input type="text" id="d-date" required placeholder="Hal. Circa 2022">
+            </div>
+            <div class="form-group">
+                <label>Pinanggalingan</label>
+                <input type="text" id="d-origin" required placeholder="Hal. Gilid ng pinto">
+            </div>
+            <div class="form-group">
+                <label>Materyales</label>
+                <input type="text" id="d-materials" required placeholder="Hal. Plastik at bakal">
+            </div>
+            <div class="form-group">
+                <label>Nagmamay-ari</label>
+                <input type="text" id="d-owner" required placeholder="Hal. Taong laging late">
+            </div>
+            <div class="form-group">
+                <label>Unang Kwento</label>
+                <textarea id="d-story1" required placeholder="Isalaysay ang kwento..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Pangalawang Kwento</label>
+                <textarea id="d-story2" placeholder="Karagdagang kwento..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Mag-upload ng Larawan mula sa Gallery</label>
+                <input type="file" id="d-image" accept="image/*" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Isumite para sa Pagsusuri</button>
+        </form>
+    </div>
+
+    <script src="db.js"></script>
+    <script>
+        const DonateApp = {
+            submitForm(e) {
+                e.preventDefault();
+                const fileInput = document.getElementById("d-image");
+                const file = fileInput.files[0];
+
+                if (!file) {
+                    alert("Mangyaring pumili muna ng larawan.");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imageDataUrl = event.target.result;
+                    const allItems = [...MuseumDB.getArtifacts(), ...MuseumDB.getPendingArtifacts()];
+                    const newIdNum = String(allItems.length + 1).padStart(2, '0');
+
+                    const newArtifact = {
+                        id: `ARTIFACT #${newIdNum}`,
+                        exhibit: document.getElementById("d-exhibit").value,
+                        title: document.getElementById("d-title").value,
+                        date: document.getElementById("d-date").value,
+                        origin: document.getElementById("d-origin").value,
+                        materials: document.getElementById("d-materials").value,
+                        owner: document.getElementById("d-owner").value,
+                        story1: document.getElementById("d-story1").value,
+                        story2: document.getElementById("d-story2").value,
+                        notes: "Naka-donate mula sa publiko.",
+                        audio: "",
+                        image: imageDataUrl,
+                        views: 0,
+                        likes: 0,
+                        liked: false
+                    };
+
+                    MuseumDB.addPendingArtifact(newArtifact);
+                    alert("Matagumpay na naisumite! Naghihintay na ito ng pag-apruba sa Admin Panel.");
+                    window.location.href = "index.html";
+                };
+
+                reader.readAsDataURL(file);
+            }
+        };
+    </script>
+</body>
+</html>
