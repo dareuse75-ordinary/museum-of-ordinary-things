@@ -69,7 +69,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Views at Like Button sa ibaba ng litrato (Nakatakda sa Zero) */
+        /* Views at Like Footer */
         .exhibit-interactive-footer {
             margin-top: 20px;
             width: 100%;
@@ -285,7 +285,7 @@
                 <img id="exhibit-img" src="" alt="Artifact Image" onerror="this.src='https://via.placeholder.com/550x400?text=Exhibit+Image'">
             </div>
 
-            <!-- Views at Like Button na naka-0 muna -->
+            <!-- Views at Like Button na naka-0 -->
             <div class="exhibit-interactive-footer">
                 <div style="letter-spacing: 1px;">
                     👁️ Views: <span id="view-count" style="color: #d6cfc7;">0</span>
@@ -351,7 +351,6 @@
     </div>
 
     <script>
-        // MASTER DATABASE NG MGA ARTIFACTS (Naka-set sa 0 ang views at likes)
         const allArtifacts = [
             {
                 id: "ARTIFACT #03",
@@ -414,12 +413,10 @@
             document.getElementById("art-id").innerText = current.id;
             document.getElementById("art-title").innerText = current.title;
             
-            // Audio source
             const audioElement = document.getElementById("art-audio");
             audioElement.src = current.audio;
             audioElement.load();
 
-            // Ipakita ang views at likes (nagsisimula sa zero)
             document.getElementById("view-count").innerText = current.views;
             document.getElementById("like-count").innerText = current.likes;
 
@@ -453,7 +450,6 @@
             if (currentIndex < 0) currentIndex = 0;
             if (currentIndex >= homeExhibits.length) currentIndex = homeExhibits.length - 1;
             
-            // Magdaragdag lang ng view kapag binuksan o nilipatan na
             homeExhibits[currentIndex].views += 1;
             document.getElementById("view-count").innerText = homeExhibits[currentIndex].views;
             
@@ -504,7 +500,6 @@
             }
         }
 
-        // Initialize
         updateHomeDisplay();
         renderArtifactsArchive();
     </script>
