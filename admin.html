@@ -4,383 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Control - Museum of Ordinary Things</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --museum-bg: #F4EFE6;
-            --museum-dark: #1E1B18;
-            --museum-gold: #9E7B43;
-            --museum-card-bg: #FCF9F2;
-            --museum-border: #D8CEBE;
-            --museum-red: #A94442;
-            --museum-green: #3C763D;
-        }
-
         body {
-            background-color: var(--museum-bg);
-            color: var(--museum-dark);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f0ea;
+            font-family: serif;
+            color: #2c221e;
+            padding: 20px;
             margin: 0;
-            padding: 0;
         }
-
-        header {
-            background-color: var(--museum-bg);
-            border-bottom: 2px solid var(--museum-border);
-            padding: 1.5rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
         }
-
-        .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--museum-dark);
-            text-decoration: none;
+        .admin-card {
+            background: #fff;
+            border: 1px solid #d3c5b4;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2.5rem;
+        .meta-info {
+            font-size: 0.85rem;
+            color: #6c584c;
+            margin-bottom: 10px;
+            display: block;
         }
-
-        nav ul li a {
-            text-decoration: none;
-            color: var(--museum-dark);
-            font-weight: 500;
-            text-transform: uppercase;
+        h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+        p {
+            line-height: 1.5;
             font-size: 0.95rem;
         }
-
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--museum-gold);
-        }
-
-        .admin-container {
-            max-width: 1000px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        .admin-container h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-container p {
-            color: #6B6358;
-            margin-bottom: 2rem;
-        }
-
-        /* Listahan ng mga Artifacts sa Admin Panel */
-        .admin-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .admin-card {
-            background: var(--museum-card-bg);
-            border: 1px solid var(--museum-border);
-            padding: 1.5rem;
-            display: grid;
-            grid-template-columns: 150px 1fr auto;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .admin-card img {
-            width: 150px;
-            height: 120px;
-            object-fit: cover;
-            border: 1px solid var(--museum-border);
-        }
-
-        .admin-info h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .admin-info p {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-
-        .tags-naming {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--museum-gold);
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .btn-action {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            cursor: pointer;
-            border: 1px solid var(--museum-border);
-            background: white;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .btn-edit {
-            background: var(--museum-dark);
-            color: white;
-            border-color: var(--museum-dark);
-        }
-
-        .btn-edit:hover {
-            background: var(--museum-gold);
-            border-color: var(--museum-gold);
-        }
-
-        .btn-delete {
-            background: #fff;
-            color: var(--museum-red);
-            border-color: var(--museum-red);
-        }
-
-        .btn-delete:hover {
-            background: var(--museum-red);
-            color: white;
-        }
-
-        /* Modal para sa pag-edit ng Artifact at Google Drive Audio Link */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(30, 27, 24, 0.6);
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .modal-content {
-            background: var(--museum-card-bg);
-            border: 1px solid var(--museum-border);
-            padding: 2rem;
-            width: 500px;
-            max-width: 90%;
-        }
-
-        .modal-content h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
+        .audio-info {
             font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-            text-transform: uppercase;
+            font-style: italic;
+            margin: 15px 0;
+            color: #555;
         }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.6rem;
-            border: 1px solid var(--museum-border);
-            background: white;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: #e6dfd5;
+            color: #443322;
         }
-
-        .form-group textarea {
-            height: 80px;
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
         }
-
-        .modal-buttons {
+        .btn-group {
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
         }
-
-        .btn-save {
-            background: var(--museum-dark);
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .btn-approve {
+            background-color: #4a6b5d;
             color: white;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            cursor: pointer;
         }
-
-        .btn-cancel {
-            background: #ccc;
-            color: black;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            cursor: pointer;
+        .btn-edit {
+            background-color: #2c221e;
+            color: white;
         }
-
-        @media (max-width: 768px) {
-            .admin-card {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .admin-card img {
-                margin: 0 auto;
-            }
+        .btn-delete {
+            background-color: transparent;
+            border: 1px solid #8b0000;
+            color: #8b0000;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo">MUSEUM OF ORDINARY THINGS</a>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="artifacts.html">Artifacts Archives</a></li>
-                <li><a href="exhibitions.html">Exhibition</a></li>
-                <li><a href="donate.html">Donate</a></li>
-                <li><a href="admin.html" class="active">Admin</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="admin-container">
-        <h1>Admin Control Panel</h1>
-        <p>Pamahalaan, i-edit ang konteksto, baguhin ang mga pangalan ng larawan, at maglagay ng Google Drive audio links para sa bawat artifact.</p>
-
-        <div class="admin-list" id="adminArtifactsList">
-            <!-- Dito kusang papasok ang mga artifact mula sa db.js -->
-        </div>
+    <h1>Admin Control - Museum of Ordinary Things</h1>
+    
+    <div id="admin-container">
+        <!-- Dito papasok ang mga artifact mula sa database -->
     </div>
 
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <h2>I-edit ang Artifact</h2>
-            <input type="hidden" id="editIndex">
-            
-            <div class="form-group">
-                <label>Pamagat</label>
-                <input type="text" id="editTitle">
-            </div>
-
-            <div class="form-group">
-                <label>Kwento / Hugot (Artifact.Description)</label>
-                <textarea id="editDescription"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Google Drive Audio Link (Artifact.audio)</label>
-                <input type="text" id="editAudioUrl" placeholder="Ilagay ang shareable link mula sa Google Drive">
-            </div>
-
-            <div class="form-group">
-                <label>Baguhin/Palitan ang Image File URL o Pangalan</label>
-                <input type="text" id="editImageUrl" placeholder="Image URL o File path">
-            </div>
-
-            <div class="modal-buttons">
-                <button class="btn-save" onclick="saveEditedArtifact()">I-save ang Pagbabago</button>
-                <button class="btn-cancel" onclick="closeEditModal()">Kanselahin</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- I-link ang db.js -->
     <script src="db.js"></script>
     <script>
-        // Load at i-display ang mga artifacts sa Admin panel pagbukas ng pahina
-        window.onload = function() {
-            renderAdminPanel();
-        };
-
-        function renderAdminPanel() {
-            let artifacts = getArtifacts();
-            const container = document.getElementById('adminArtifactsList');
-            container.innerHTML = "";
-
+        function renderAdminList() {
+            const container = document.getElementById('admin-container');
+            const artifacts = getArtifacts();
+            
             if (artifacts.length === 0) {
-                container.innerHTML = "<p style='text-align:center; color:#6B6358;'>Wala pang nakatalang artifact sa sistema.</p>";
+                container.innerHTML = `<p style="text-align: center;">Walang nakabinbing artifact sa ngayon.</p>`;
                 return;
             }
 
-            artifacts.forEach((art, index) => {
-                const card = document.createElement('div');
-                card.className = 'admin-card';
+            container.innerHTML = '';
+            
+            artifacts.forEach(item => {
+                let isApproved = item.status === "Approved";
+                let statusClass = isApproved ? "status-badge status-approved" : "status-badge";
+                let statusText = isApproved ? "Naka-apruba na (Published)" : "Nakabinbin (Pending)";
 
+                let card = document.createElement('div');
+                card.className = 'admin-card';
                 card.innerHTML = `
-                    <img src="${art.imageUrl}" alt="${art.title}">
-                    <div class="admin-info">
-                        <div class="tags-naming">${art.imageName} | ${art.descriptionName} | ${art.audioName}</div>
-                        <h3>${art.title}</h3>
-                        <p>${art.description}</p>
-                        <p><strong>Audio Link:</strong> ${art.audioUrl ? art.audioUrl : '<i>Wala pang Google Drive audio link</i>'}</p>
-                    </div>
-                    <div class="admin-actions">
-                        <button class="btn-action btn-edit" onclick="openEditModal(${index})">I-edit / Audio</button>
-                        <button class="btn-action btn-delete" onclick="deleteArtifact(${index})">Tanggalin</button>
+                    <span class="${statusClass}">${statusText}</span>
+                    <span class="meta-info">${item.imageName} | ${item.descriptionName} | ${item.audioName}</span>
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <div class="audio-info">Audio Link: ${item.audioUrl}</div>
+                    
+                    <div class="btn-group">
+                        ${!isApproved ? `<button class="btn-approve" onclick="approveItem(${item.id})">I-apruba / I-publish</button>` : ''}
+                        <button class="btn-edit" onclick="alert('I-edit ang item na ito')">I-edit / Audio</button>
+                        <button class="btn-delete" onclick="removeItem(${item.id})">Tanggalin</button>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // Buksan ang modal para sa pag-edit
-        function openEditModal(index) {
-            let artifacts = getArtifacts();
-            let art = artifacts[index];
-
-            document.getElementById('editIndex').value = index;
-            document.getElementById('editTitle').value = art.title;
-            document.getElementById('editDescription').value = art.description;
-            document.getElementById('editAudioUrl').value = art.audioUrl || "";
-            document.getElementById('editImageUrl').value = art.imageUrl || "";
-
-            document.getElementById('editModal').style.display = 'flex';
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-
-        // I-save ang mga binagong impormasyon
-        function saveEditedArtifact() {
-            let index = document.getElementById('editIndex').value;
-            let artifacts = getArtifacts();
-
-            artifacts[index].title = document.getElementById('editTitle').value;
-            artifacts[index].description = document.getElementById('editDescription').value;
-            artifacts[index].audioUrl = document.getElementById('editAudioUrl').value;
-            artifacts[index].imageUrl = document.getElementById('editImageUrl').value;
-
-            localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
-            closeEditModal();
-            renderAdminPanel();
-            alert("Matagumpay na na-update ang artifact!");
-        }
-
-        // Tanggalin ang artifact
-        function deleteArtifact(index) {
-            if (confirm("Sigurado ka bang gusto mong tanggalin ang artifact na ito sa museo?")) {
-                let artifacts = getArtifacts();
-                artifacts.splice(index, 1);
-                localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
-                renderAdminPanel();
+        function approveItem(id) {
+            if(updateArtifactStatus(id, "Approved")) {
+                alert("Matagumpay na na-apruba ang artifact!");
+                renderAdminList();
             }
         }
+
+        function removeItem(id) {
+            if(confirm("Sigurado ka bang gusto mong tanggalin ito?")) {
+                deleteArtifact(id);
+                renderAdminList();
+            }
+        }
+
+        // I-load ang listahan pagbukas ng pahina
+        window.onload = renderAdminList;
     </script>
 </body>
 </html>

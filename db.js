@@ -1,45 +1,24 @@
-// db.js - Mock database at Auto-increment naming function na may suporta sa pag-edit ng image file
+// db.js - May kasamang function para sa pag-apruba ng artifact
 
 function getArtifacts() {
-    let artifacts = JSON.parse(localStorage.getItem('museum_artifacts')) || [];
-    return artifacts;
+    return JSON.parse(localStorage.getItem('museum_artifacts')) || [];
 }
 
-// Function para mag-save ng bagong artifact
-function saveNewArtifact(title, description, imageFileUrl) {
-    let artifacts = getArtifacts();
-    
-    let nextNumber = artifacts.length + 1;
-    let formattedNum = String(nextNumber).padStart(2, '0');
-
-    let newEntry = {
-        id: nextNumber,
-        imageName: `Artifact.image #${formattedNum}`,
-        imageUrl: imageFileUrl, // Dito nakalagay ang file ng image na pwedeng palitan o i-edit
-        descriptionName: `Artifact.Description #${formattedNum}`,
-        title: title,
-        description: description,
-        audioName: `Artifact.audio #${formattedNum}`,
-        audioUrl: "", // Manual na ilalagay ng Admin galing Google Drive
-        views: 0,
-        likes: 0,
-        status: "Pending"
-    };
-
-    artifacts.push(newEntry);
-    localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
-    return formattedNum;
-}
-
-// Function para ma-update/ma-edit ng Admin o sa Donate ang image file at iba pang detalye
-function updateArtifactImage(id, newImageFileUrl) {
+// Function para palitan ang status ng artifact (Approved / Pending)
+function updateArtifactStatus(id, newStatus) {
     let artifacts = getArtifacts();
     let index = artifacts.findIndex(item => item.id === id);
-    
     if (index !== -1) {
-        artifacts[index].imageUrl = newImageFileUrl;
+        artifacts[index].status = newStatus;
         localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
         return true;
     }
     return false;
+}
+
+// Function para mag-delete
+function deleteArtifact(id) {
+    let artifacts = getArtifacts();
+    artifacts = artifacts.filter(item => item.id !== id);
+    localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
 }
