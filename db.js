@@ -1,7 +1,30 @@
-// db.js - Tumatanggap ng kontribusyon pero ang image/audio ay galing sa Spck sequence (Artifact1.jpg, Artifact1.mp3)
+// db.js - May kasamang default artifact para laging may laman kahit bagong bukas ang browser
 
 function getArtifacts() {
-    return JSON.parse(localStorage.getItem('museum_artifacts')) || [];
+    let artifacts = JSON.parse(localStorage.getItem('museum_artifacts'));
+    
+    // Kung walang laman ang localStorage, awtomatiko nating ilalagay ang iyong default artifact
+    if (!artifacts || artifacts.length === 0) {
+        artifacts = [
+            {
+                id: 1,
+                visitorOriginalImage: "Artifact1.jpg",
+                imageName: "Artifact.image #01",
+                imageUrl: "Artifact1.jpg",
+                descriptionName: "Artifact.Description #01",
+                title: "Abaniko ni Coco",
+                description: "Sana all tulad nitong pamaypay. Kahit luma na at kupas na ang bulaklak, naka-frame pa rin at mukhang sosyal sa dingding. Ako nga, bago-bago paman, pero mukhang pagod na. Ito, dekada na ang binilang, pero alagang-alaga, pinupunasan pa araw-araw at ipinagmamalaki sa mga bisita...",
+                audioName: "Artifact.audio #01",
+                audioUrl: "Artifact1.mp3",
+                views: 1,
+                likes: 0,
+                status: "Approved" // Naka-approve na agad para lumitaw sa archives
+            }
+        ];
+        localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
+    }
+    
+    return artifacts;
 }
 
 function updateArtifactStatus(id, newStatus) {
@@ -21,21 +44,20 @@ function deleteArtifact(id) {
     localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
 }
 
-// Function para sa pag-save ng bagong artifact mula sa donor form
 function saveNewArtifact(title, description, visitorImageName = "") {
     let artifacts = getArtifacts();
     let nextNumber = artifacts.length + 1;
 
     let newEntry = {
         id: nextNumber,
-        visitorOriginalImage: visitorImageName, // Pangalan ng file na galing sa bisita (para sa reference mo lang)
+        visitorOriginalImage: visitorImageName,
         imageName: `Artifact.image #${String(nextNumber).padStart(2, '0')}`,
-        imageUrl: `Artifact${nextNumber}.jpg`, // Awtomatikong babasahin ang hinanda mo sa Spck (hal. Artifact1.jpg)
+        imageUrl: `Artifact${nextNumber}.jpg`,
         descriptionName: `Artifact.Description #${String(nextNumber).padStart(2, '0')}`,
         title: title,
         description: description,
         audioName: `Artifact.audio #${String(nextNumber).padStart(2, '0')}`,
-        audioUrl: `Artifact${nextNumber}.mp3`, // Awtomatikong babasahin ang audio sa Spck (hal. Artifact1.mp3)
+        audioUrl: `Artifact${nextNumber}.mp3`,
         views: 0,
         likes: 0,
         status: "Pending"
