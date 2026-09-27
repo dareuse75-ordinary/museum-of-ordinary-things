@@ -1,4 +1,4 @@
-// db.js - Gamit ang simpleng format na Artifact1.jpg at Artifact1.mp3
+// db.js - Tumatanggap ng kontribusyon pero ang image/audio ay galing sa Spck sequence (Artifact1.jpg, Artifact1.mp3)
 
 function getArtifacts() {
     return JSON.parse(localStorage.getItem('museum_artifacts')) || [];
@@ -21,20 +21,21 @@ function deleteArtifact(id) {
     localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
 }
 
-// Function para sa pag-save ng bagong artifact gamit ang simpleng pangalan
-function saveNewArtifact(title, description) {
+// Function para sa pag-save ng bagong artifact mula sa donor form
+function saveNewArtifact(title, description, visitorImageName = "") {
     let artifacts = getArtifacts();
     let nextNumber = artifacts.length + 1;
 
     let newEntry = {
         id: nextNumber,
+        visitorOriginalImage: visitorImageName, // Pangalan ng file na galing sa bisita (para sa reference mo lang)
         imageName: `Artifact.image #${String(nextNumber).padStart(2, '0')}`,
-        imageUrl: `Artifact${nextNumber}.jpg`, // Halimbawa: Artifact1.jpg
+        imageUrl: `Artifact${nextNumber}.jpg`, // Awtomatikong babasahin ang hinanda mo sa Spck (hal. Artifact1.jpg)
         descriptionName: `Artifact.Description #${String(nextNumber).padStart(2, '0')}`,
         title: title,
         description: description,
         audioName: `Artifact.audio #${String(nextNumber).padStart(2, '0')}`,
-        audioUrl: `Artifact${nextNumber}.mp3`, // Halimbawa: Artifact1.mp3
+        audioUrl: `Artifact${nextNumber}.mp3`, // Awtomatikong babasahin ang audio sa Spck (hal. Artifact1.mp3)
         views: 0,
         likes: 0,
         status: "Pending"
