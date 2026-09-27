@@ -410,12 +410,10 @@
             }
         });
 
-        let homeExhibits = allArtifacts;
         let currentIndex = 0;
 
         function updateHomeDisplay() {
-            if (homeExhibits.length === 0) return;
-            const current = homeExhibits[currentIndex];
+            const current = allArtifacts[currentIndex];
 
             document.getElementById("exhibit-img").src = current.image;
             document.getElementById("art-id").innerText = current.id;
@@ -437,7 +435,6 @@
                 likeBtn.innerHTML = "❤️ Like (<span id='like-count'>" + current.likes + "</span>)";
             }
 
-            // Dito inayos para bawat artifact ay kumuha ng sarili nitong metadata properties
             document.getElementById("meta-date").innerText = current.date;
             document.getElementById("meta-origin").innerText = current.origin;
             document.getElementById("meta-materials").innerText = current.materials;
@@ -448,20 +445,18 @@
             document.getElementById("art-notes").innerText = current.notes;
             
             const numStr = String(currentIndex + 1).padStart(2, '0');
-            const totalStr = String(homeExhibits.length).padStart(2, '0');
+            const totalStr = String(allArtifacts.length).padStart(2, '0');
             document.getElementById("counter").innerText = numStr + " / " + totalStr;
         }
 
         function likeArtifact() {
-            const current = homeExhibits[currentIndex];
-            const originalIndex = currentIndex;
-
+            const current = allArtifacts[currentIndex];
             if (!current.liked) {
                 current.likes += 1;
                 current.liked = true;
                 
-                localStorage.setItem(`artifact_${originalIndex}_likes`, current.likes);
-                localStorage.setItem(`artifact_${originalIndex}_liked`, true);
+                localStorage.setItem(`artifact_${currentIndex}_likes`, current.likes);
+                localStorage.setItem(`artifact_${currentIndex}_liked`, true);
 
                 updateHomeDisplay();
             }
@@ -474,14 +469,12 @@
             currentIndex += direction;
             
             if (currentIndex < 0) {
-                currentIndex = homeExhibits.length - 1;
-            } else if (currentIndex >= homeExhibits.length) {
+                currentIndex = allArtifacts.length - 1;
+            } else if (currentIndex >= allArtifacts.length) {
                 currentIndex = 0;
             }
             
-            homeExhibits[currentIndex].views += 1;
-            document.getElementById("view-count").innerText = homeExhibits[currentIndex].views;
-            
+            allArtifacts[currentIndex].views += 1;
             updateHomeDisplay();
         }
 
@@ -489,7 +482,7 @@
             const grid = document.getElementById("artifacts-grid");
             grid.innerHTML = "";
 
-            allArtifacts.forEach((item) => {
+            allArtifacts.forEach((item, index) => {
                 const card = document.createElement("div");
                 card.className = "thumb-card";
                 card.innerHTML = `
@@ -500,10 +493,7 @@
                     </div>
                 `;
                 card.onclick = function() {
-                    const targetIndex = homeExhibits.indexOf(item);
-                    if (targetIndex !== -1) {
-                        currentIndex = targetIndex;
-                    }
+                    currentIndex = index;
                     switchView('home');
                     updateHomeDisplay();
                 };
