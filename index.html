@@ -463,8 +463,9 @@
             const totalStr = String(homeExhibits.length).padStart(2, '0');
             document.getElementById("counter").innerText = numStr + " / " + totalStr;
 
-            document.getElementById("prev-btn").disabled = currentIndex === 0;
-            document.getElementById("next-btn").disabled = currentIndex === homeExhibits.length - 1;
+            // Dito inaayos ang enabling/disabling ng buttons para gumana ang PREV at NEXT nang maayos
+            document.getElementById("prev-btn").disabled = (currentIndex === 0);
+            document.getElementById("next-btn").disabled = (currentIndex === homeExhibits.length - 1);
         }
 
         function likeArtifact() {
@@ -475,7 +476,6 @@
                 current.likes += 1;
                 current.liked = true;
                 
-                // I-save sa localStorage para hindi mawala pag nag-refresh
                 localStorage.setItem(`artifact_${originalIndex}_likes`, current.likes);
                 localStorage.setItem(`artifact_${originalIndex}_liked`, true);
 
