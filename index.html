@@ -117,7 +117,6 @@
             text-align: center;
         }
         
-        /* Footer details sa loob ng card (Views, Likes, Audio, Share) */
         .exhibit-footer {
             display: flex;
             justify-content: space-between;
@@ -133,6 +132,7 @@
             display: flex;
             gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .interactive-btn {
             background: transparent;
@@ -220,7 +220,13 @@
                             <span>❤️ ${latestItem.likes || 0} Likes</span>
                         </div>
                         <div class="action-btns">
-                            <span>🎧 ${latestItem.audioName || 'Audio'}</span>
+                            ${latestItem.audioUrl ? `
+                                <audio controls style="height: 32px; max-width: 190px;">
+                                    <source src="${latestItem.audioUrl}" type="audio/mpeg">
+                                    Ang browser mo ay hindi sumusuporta sa audio.
+                                </audio>
+                            ` : `<span>🎧 ${latestItem.audioName || 'Walang Audio'}</span>`}
+                            
                             <button class="interactive-btn" onclick="shareCenterpiece('${latestItem.title}')">Ibahagi</button>
                             <button class="interactive-btn" onclick="window.location.href='artifacts.html?id=${latestItem.id}'">Tingnan sa Archives</button>
                         </div>
