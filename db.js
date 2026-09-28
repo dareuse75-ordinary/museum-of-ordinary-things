@@ -1,24 +1,14 @@
-// Asynchronous function para i-load ang mappings mula sa JSON files
-async function loadMappings() {
-    try {
-        const [audioRes, imageRes] = await Promise.all([
-            fetch('audio-mapping.json').catch(() => ({ json: () => ({}) })),
-            fetch('image-mapping.json').catch(() => ({ json: () => ({}) }))
-        ]);
-        
-        const audioMap = await audioRes.json();
-        const imageMap = await imageRes.json();
-        
-        return { audioMap, imageMap };
-    } catch (error) {
-        console.error("Error loading mappings:", error);
-        return { audioMap: {}, imageMap: {} };
-    }
-}
+// Database script para sa Museum of Ordinary Things na may Google Drive mapping
+const IMAGE_MAP = {
+    "1": "https://lh3.googleusercontent.com/d/1Wqqw5rSItBovn6gklxDDFTHjuxm2KNNV"
+};
 
-async function getArtifacts() {
+const AUDIO_MAP = {
+    // Ilagay dito ang audio Google Drive ID kung kinakailangan
+};
+
+function getArtifacts() {
     let artifacts = JSON.parse(localStorage.getItem('museum_artifacts'));
-    const { audioMap, imageMap } = await loadMappings();
     
     if (!artifacts || artifacts.length === 0) {
         artifacts = [
@@ -26,12 +16,12 @@ async function getArtifacts() {
                 id: 1,
                 visitorOriginalImage: "Artifact1.jpg",
                 imageName: "Artifact.image #01",
-                imageUrl: "", // Ise-set mamaya galing sa image-mapping.json
+                imageUrl: "Artifact1.jpg",
                 descriptionName: "Artifact.Description #01",
                 title: "Abaniko ni Coco",
                 description: "Sana all tulad nitong pamaypay. Kahit luma na at kupas na ang bulaklak, naka-frame pa rin at mukhang sosyal sa dingding. Ako nga, bago-bago pa, pero mukhang pagod na. Ito, dekada na ang binilang, pero alagang-alaga, pinupunasan pa araw-araw at ipinagmamalaki sa mga bisita...",
                 audioName: "Artifact.audio #01",
-                audioUrl: "", // Ise-set mamaya galing sa audio-mapping.json
+                audioUrl: "", 
                 views: 1,
                 likes: 0,
                 status: "Approved"
@@ -39,14 +29,14 @@ async function getArtifacts() {
         ];
         localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
     }
-
-    // I-inject ang mga link galing sa JSON mapping batay sa ID ng artifact
+    
+    // I-aplay ang mga link mula sa mapping batay sa ID
     artifacts = artifacts.map(item => {
         const stringId = String(item.id);
         return {
             ...item,
-            imageUrl: imageMap[stringId] || item.imageUrl,
-            audioUrl: audioMap[stringId] || item.audioUrl
+            imageUrl: IMAGE_MAP[stringId] || item.imageUrl,
+            audioUrl: AUDIO_MAP[stringId] || item.audioUrl
         };
     });
     
@@ -55,8 +45,8 @@ async function getArtifacts() {
 
 function updateArtifactStatus(id, newStatus) {
     let artifacts = JSON.parse(localStorage.getItem('museum_artifacts')) || [];
-    let index = artifacts.findIndex(item => item.id === id);
-    if (index !== -1) {
+'    let index = artifacts.findIndex(item => item.id === id);
+'    if (index !== -1) {
         artifacts[index].status = newStatus;
         localStorage.setItem('museum_artifacts', JSON.stringify(artifacts));
         return true;
@@ -78,7 +68,7 @@ function saveNewArtifact(title, description, visitorImageName = "", audioDriveUr
         id: nextNumber,
         visitorOriginalImage: visitorImageName,
         imageName: `Artifact.image #${String(nextNumber).padStart(2, '0')}`,
-        imageUrl: "", 
+        imageUrl: `Artifact${nextNumber}.jpg`,
         descriptionName: `Artifact.Description #${String(nextNumber).padStart(2, '0')}`,
         title: title,
         description: description,

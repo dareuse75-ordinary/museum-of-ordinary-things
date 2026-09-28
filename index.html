@@ -190,6 +190,9 @@
 
     <script src="db.js"></script>
     <script>
+        // Pansamantalang i-clear ang lumang storage para ma-load ang bagong mapping
+        localStorage.removeItem('museum_artifacts');
+
         document.addEventListener("DOMContentLoaded", async function() {
             const displayContainer = document.getElementById("centerpiece-display");
             if (!displayContainer) return;
