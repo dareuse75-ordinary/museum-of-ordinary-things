@@ -37,6 +37,40 @@
             margin: 40px auto;
             padding: 0 20px;
         }
+        /* Grid para sa Thumbnails */
+        .thumbnails-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .thumbnail-card {
+            background: #ffffff;
+            border: 1px solid #e0dbce;
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+        .thumbnail-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .thumbnail-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .thumbnail-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+        /* Full Expanded View (Naka-hide muna hanggang sa pindutin) */
+        .expanded-container {
+            display: none;
+        }
         .artifact-card {
             background: #ffffff;
             border: 1px solid #e0dbce;
@@ -55,7 +89,7 @@
             width: 100%;
             height: auto;
             max-height: 600px;
-            object-fit: contain; /* Buong naipapakita ang imahe nang walang pinuputol */
+            object-fit: contain;
             display: block;
         }
         .artifact-content {
@@ -92,16 +126,16 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        .share-btn {
+        .back-btn, .share-btn {
             background: none;
             border: 1px solid #ccc;
-            padding: 5px 10px;
+            padding: 5px 12px;
             cursor: pointer;
             font-family: 'Times New Roman', serif;
-            font-size: 12px;
+            font-size: 13px;
             color: #444;
         }
-        .share-btn:hover {
+        .back-btn:hover, .share-btn:hover {
             background: #2c2c2c;
             color: #fff;
         }
@@ -120,18 +154,18 @@
         </nav>
     </header>
 
-    <h1 class="title">Artifacts Archives</h1>
+    <h1 class="title" id="page-title">Artifacts Archives</h1>
 
     <div class="container" id="archives-container">
-        <!-- Dito kusang papasok ang mga approved artifacts mula sa database -->
+        <!-- Dito lalabas ang thumbnails o ang expanded view -->
     </div>
 
     <script src="db.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const container = document.getElementById("archives-container");
+            const pageTitle = document.getElementById("page-title");
             const artifacts = getArtifacts();
-            
             const approvedArtifacts = artifacts.filter(item => item.status === "Approved" || !item.status);
 
             if (approvedArtifacts.length === 0) {
@@ -139,24 +173,49 @@
                 return;
             }
 
-            container.innerHTML = approvedArtifacts.map(item => `
-                <div class="artifact-card">
-                    <div class="image-container">
-                        <img src="${item.imageUrl}" alt="${item.title}">
-                    </div>
-                    <div class="artifact-content">
-                        <div class="artifact-meta">${item.imageName} | ${item.descriptionName}</div>
-                        <div class="artifact-title">${item.title}</div>
-                        <div class="artifact-description">${item.description}</div>
-                        <div class="artifact-footer">
-                            <span>👁️ ${item.views || 0} Views</span>
-                            <span>❤️ ${item.likes || 0} Likes</span>
-                            <span>🎧 ${item.audioName}</span>
-                            <button class="share-btn" onclick="shareArtifact('${item.title}')">Ibahagi (Share)</button>
+            // Suriin kung may piniling specific ID sa URL (hal. artifacts.html?id=1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedId = urlParams.get('id');
+
+            if (selectedId) {
+                // Expanded View para sa partikular na artifact
+                const item = approvedArtifacts.find(a => a.id == selectedId);
+                if (item) {
+                    pageTitle.style.display = "none"; // Itago ang malaking header para focus sa item
+                    container.innerHTML = `
+                        <button class="back-btn" onclick="window.location.href='artifacts.html'" style="margin-bottom: 20px;">← Bumalik sa Archives</button>
+                        <div class="artifact-card">
+                            <div class="image-container">
+                                <img src="${item.imageUrl}" alt="${item.title}">
+                            </div>
+                            <div class="artifact-content">
+                                <div class="artifact-meta">${item.imageName} | ${item.descriptionName}</div>
+                                <div class="artifact-title">${item.title}</div>
+                                <div class="artifact-description">${item.description}</div>
+                                <div class="artifact-footer">
+                                    <span>👁️ ${item.views || 0} Views</span>
+                                    <span>❤️ ${item.likes || 0} Likes</span>
+                                    <span>🎧 ${item.audioName}</span>
+                                    <button class="share-btn" onclick="shareArtifact('${item.title}')">Ibahagi (Share)</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    `;
+                    return;
+                }
+            }
+
+            // Default View: Listahan ng mga Thumbnails
+            container.innerHTML = `
+                <div class="thumbnails-grid">
+                    ${approvedArtifacts.map(item => `
+                        <div class="thumbnail-card" onclick="window.location.href='artifacts.html?id=${item.id}'">
+                            <img src="${item.imageUrl}" alt="${item.title}">
+                            <div class="thumbnail-title">${item.title}</div>
+                        </div>
+                    `).join('')}
                 </div>
-            `).join('');
+            `;
         });
 
         function shareArtifact(title) {
@@ -167,7 +226,7 @@
                     url: window.location.href,
                 }).catch((error) => console.log('Error sharing:', error));
             } else {
-                alert("Hindi suportado ng browser mo ang direktang share. Kopyahin na lamang ang link.");
+                alert("Hindi suportado ng browser mo ang direktang share.");
             }
         }
     </script>

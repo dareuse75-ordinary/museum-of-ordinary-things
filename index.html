@@ -4,412 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museum of Ordinary Things</title>
-    <!-- Google Fonts: Klasikong Serif at Malinis na Sans-Serif -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --museum-bg: #F4EFE6;
-            --museum-dark: #1E1B18;
-            --museum-gold: #9E7B43;
-            --museum-card-bg: #FCF9F2;
-            --museum-border: #D8CEBE;
-            --museum-muted: #6B6358;
-        }
-
-        * {
+        body {
+            font-family: 'Times New Roman', serif;
+            background-color: #1a1917;
+            color: #f4f1ea;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-
-        body {
-            background-color: var(--museum-bg);
-            color: var(--museum-dark);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            line-height: 1.7;
-        }
-
-        .museum-ticket-banner {
-            background-color: var(--museum-dark);
-            color: var(--museum-bg);
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
         header {
-            background-color: var(--museum-bg);
-            border-bottom: 2px solid var(--museum-border);
-            padding: 1.5rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(30, 27, 24, 0.03);
+            text-align: center;
+            padding: 40px 20px 20px;
+            border-bottom: 1px solid #333;
+            background: #141312;
         }
-
-        .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--museum-dark);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo span {
-            font-size: 1rem;
-            color: var(--museum-gold);
-            font-weight: 400;
-            font-style: italic;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: var(--museum-dark);
-            font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
+        .museum-subtitle {
+            font-size: 11px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            transition: color 0.3s ease;
-            position: relative;
-            padding-bottom: 4px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        h1.museum-title {
+            font-size: 26px;
+            letter-spacing: 3px;
+            margin: 0 0 20px 0;
+            font-weight: normal;
+            color: #fff;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: #fff;
+            border-bottom: 1px solid #fff;
         }
 
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--museum-gold);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after, nav ul li a.active::after {
-            width: 100%;
-        }
-
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--museum-gold);
-        }
-
-        .hero-section {
-            max-width: 1100px;
-            margin: 4rem auto;
-            padding: 0 2rem;
+        .centerpiece-container {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 0 20px;
             text-align: center;
         }
-
-        .hero-subtitle {
-            color: var(--museum-gold);
-            text-transform: uppercase;
+        .section-tag {
+            font-size: 12px;
             letter-spacing: 3px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .hero-section h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        .curator-note {
-            max-width: 700px;
-            margin: 0 auto 3rem auto;
-            font-style: italic;
-            color: var(--museum-muted);
-            font-size: 1.15rem;
-            border-left: 3px solid var(--museum-gold);
-            border-right: 3px solid var(--museum-gold);
-            padding: 1rem 2rem;
-            background: rgba(158, 123, 67, 0.03);
-        }
-
-        .exhibit-hall {
-            background-color: var(--museum-card-bg);
-            border: 1px solid var(--museum-border);
-            padding: 3rem;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            text-align: left;
-            box-shadow: 0 20px 40px rgba(30, 27, 24, 0.05);
-        }
-
-        .exhibit-frame {
-            padding: 12px;
-            background: #FFFFFF;
-            border: 1px solid var(--museum-border);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        }
-
-        .exhibit-frame img {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-            display: block;
-            filter: sepia(15%);
-            transition: filter 0.5s ease;
-        }
-
-        .exhibit-frame img:hover {
-            filter: sepia(0%);
-        }
-
-        .exhibit-details .plaque-tag {
-            font-size: 0.75rem;
-            letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--museum-gold);
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            display: inline-block;
+            color: #b59f78;
+            margin-bottom: 20px;
         }
-
-        .exhibit-details h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
-            line-height: 1.3;
+        
+        .exhibit-card {
+            background: #242220;
+            border: 1px solid #3d3a36;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: left;
         }
-
-        .exhibit-details .quote {
-            font-style: italic;
-            color: var(--museum-muted);
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-        }
-
-        /* Bagong dagdag: Controls sa ibaba ng display (Views, Likes, Audio, Share) */
-        .artifact-controls {
-            border-top: 1px solid var(--museum-border);
-            padding-top: 1.2rem;
-            margin-top: 1.5rem;
+        .image-frame {
+            background: #000;
+            padding: 15px;
+            border: 1px solid #444;
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            overflow: hidden;
+            cursor: pointer;
         }
-
-        .stats-and-audio {
+        .exhibit-card img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            display: block;
+        }
+        .exhibit-meta {
+            font-size: 12px;
+            color: #aaa;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .exhibit-title {
+            font-size: 28px;
+            font-weight: normal;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .exhibit-title:hover {
+            color: #b59f78;
+        }
+        .exhibit-desc {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #d1cbd0;
+            font-style: italic;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        /* Footer details sa loob ng card (Views, Likes, Audio, Share) */
+        .exhibit-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid #3d3a36;
+            padding-top: 20px;
+            font-size: 13px;
+            color: #ccc;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 15px;
         }
-
-        .stat-item {
-            font-size: 0.9rem;
-            color: var(--museum-muted);
-            font-weight: 500;
-        }
-
-        .like-btn {
-            background: transparent;
-            border: 1px solid var(--museum-border);
-            padding: 0.4rem 0.8rem;
-            cursor: pointer;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.85rem;
-            color: var(--museum-dark);
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .like-btn:hover:not(:disabled) {
-            border-color: var(--museum-gold);
-            color: var(--museum-gold);
-        }
-
-        .like-btn.liked {
-            background-color: var(--museum-gold);
-            color: white;
-            border-color: var(--museum-gold);
-        }
-
-        .audio-btn {
-            background-color: var(--museum-dark);
-            color: var(--museum-bg);
-            border: none;
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: background 0.3s ease;
-        }
-
-        .audio-btn:hover {
-            background-color: var(--museum-gold);
-        }
-
-        .share-section {
+        .action-btns {
             display: flex;
-            align-items: center;
             gap: 10px;
-            font-size: 0.85rem;
-            color: var(--museum-muted);
+            align-items: center;
+        }
+        .interactive-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #f4f1ea;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-family: 'Times New Roman', serif;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .interactive-btn:hover {
+            background: #f4f1ea;
+            color: #1a1917;
+            border-color: #f4f1ea;
         }
 
-        .share-links a {
-            color: var(--museum-dark);
-            text-decoration: none;
-            padding: 0.2rem 0.5rem;
-            border: 1px solid var(--museum-border);
-            font-size: 0.8rem;
-            transition: background 0.2s ease;
-        }
-
-        .share-links a:hover {
-            background-color: var(--museum-gold);
-            color: white;
-            border-color: var(--museum-gold);
-        }
-
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-            nav ul {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
-            .exhibit-hall {
-                grid-template-columns: 1fr;
-                padding: 1.5rem;
-            }
-            .stats-and-audio {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        footer {
+            text-align: center;
+            padding: 30px;
+            font-size: 11px;
+            color: #777;
+            border-top: 1px solid #333;
+            background: #141312;
+            letter-spacing: 1px;
+            margin-top: 60px;
         }
     </style>
 </head>
 <body>
 
-    <div class="museum-ticket-banner">
-        Est. 2026 &bull; Digital Sanctuary of Forgotten Memories &bull; Admission: Libre ang Alaala
-    </div>
-
     <header>
-        <a href="index.html" class="logo">
-            MUSEUM OF ORDINARY THINGS <span>/ Hall 01</span>
-        </a>
+        <div class="museum-subtitle">Est. 2026 • Digital Sanctuary of Forgotten Memories</div>
+        <h1 class="museum-title">MUSEUM OF ORDINARY THINGS</h1>
         <nav>
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="artifacts.html">Artifacts Archives</a></li>
-                <li><a href="exhibitions.html">Exhibition</a></li>
-                <li><a href="donate.html">Donate</a></li>
-                <li><a href="admin.html">Admin</a></li>
-            </ul>
+            <a href="index.html">Home</a>
+            <a href="artifacts.html">Archives</a>
+            <a href="exhibition.html">Exhibition</a>
+            <a href="donate.html">Donate</a>
+            <a href="admin.html">Admin</a>
         </nav>
     </header>
 
-    <section class="hero-section">
-        <span class="hero-subtitle">Isang Paanyaya sa Pagninilay</span>
-        <h1>Mga Bagay na Nawalan ng Halaga, Ngunit Puno ng Kwento</h1>
+    <main class="centerpiece-container">
+        <div class="section-tag">— Pinakatampok na Obra (Featured Centerpiece) —</div>
         
-        <div class="curator-note">
-            "Sa bawat sirang gamit, lumang resibo, o naiwang susi, may nakatagong bahagi ng ating nakaraan na patuloy na humihinga."
+        <div id="centerpiece-display">
+            <!-- Dito kusang lilitaw ang buong detalye ng centerpiece -->
         </div>
+    </main>
 
-        <!-- Tampok na Artifact mula sa Archives -->
-        <div class="exhibit-hall">
-            <div class="exhibit-frame">
-                <img src="https://images.unsplash.com/photo-1584467735811-628469cb9ddb?auto=format&fit=crop&w=800&q=80" alt="Lumang Susi">
-            </div>
-            
-            <div class="exhibit-details">
-                <span class="plaque-tag">Exhibit No. 042 &bull; Mula sa Archives</span>
-                <h2>Ang Susi sa Kwarto ng Ex Mong Hindi Nagpasabi</h2>
-                <p class="quote">"Hindi na kasama sa pinto niyo ang susi na ito, pero hanggang ngayon, nakakakurot pa rin sa tagiliran kapag nakikita ko sa pinakailalim ng drawer."</p>
-                
-                <!-- Narito ang mga Controls sa ibaba ng display -->
-                <div class="artifact-controls">
-                    <div class="stats-and-audio">
-                        <div class="stat-item">
-                            👁️ 1,420 Views &nbsp;&bull;&nbsp; 
-                            <button class="like-btn" id="likeBtn" onclick="toggleLike()">
-                                ❤️ <span id="likeCount">342</span> Likes
-                            </button>
-                        </div>
-                        <button class="audio-btn" onclick="playVoiceover()">🔊 Pakinggan ang Voiceover</button>
+    <footer>
+        &copy; 2026 Museum of Ordinary Things. All rights reserved.
+    </footer>
+
+    <script src="db.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const displayContainer = document.getElementById("centerpiece-display");
+            if (!displayContainer) return;
+
+            const artifacts = getArtifacts();
+            const approved = artifacts.filter(item => item.status === "Approved" || !item.status);
+
+            if (approved.length === 0) {
+                displayContainer.innerHTML = `<p style="color: #888; padding: 40px;">Wala pang naka-display na obra sa kasalukuyan.</p>`;
+                return;
+            }
+
+            // Kunin ang pinakahuling inambag para gawing centerpiece
+            const latestItem = approved[approved.length - 1];
+
+            displayContainer.innerHTML = `
+                <div class="exhibit-card">
+                    <div class="image-frame" onclick="window.location.href='artifacts.html?id=${latestItem.id}'">
+                        <img src="${latestItem.imageUrl}" alt="${latestItem.title}">
                     </div>
-
-                    <div class="share-section">
-                        <span>Ibahagi:</span>
-                        <div class="share-links">
-                            <a href="#" onclick="shareSocial('facebook')">Facebook</a>
-                            <a href="#" onclick="shareSocial('twitter')">X</a>
-                            <a href="#" onclick="shareSocial('copy')">Kopyahin ang Link</a>
+                    <div class="exhibit-meta">${latestItem.imageName || ''} | ${latestItem.descriptionName || ''}</div>
+                    <div class="exhibit-title" onclick="window.location.href='artifacts.html?id=${latestItem.id}'">${latestItem.title}</div>
+                    <div class="exhibit-desc">"${latestItem.description}"</div>
+                    
+                    <div class="exhibit-footer">
+                        <div>
+                            <span>👁️ ${latestItem.views || 0} Views</span> &nbsp;&nbsp;|&nbsp;&nbsp; 
+                            <span>❤️ ${latestItem.likes || 0} Likes</span>
+                        </div>
+                        <div class="action-btns">
+                            <span>🎧 ${latestItem.audioName || 'Audio'}</span>
+                            <button class="interactive-btn" onclick="shareCenterpiece('${latestItem.title}')">Ibahagi</button>
+                            <button class="interactive-btn" onclick="window.location.href='artifacts.html?id=${latestItem.id}'">Tingnan sa Archives</button>
                         </div>
                     </div>
                 </div>
+            `;
+        });
 
-            </div>
-        </div>
-    </section>
-
-    <!-- JavaScript para sa Like limit at iba pang actions -->
-    <script>
-        let hasLiked = false;
-
-        function toggleLike() {
-            const likeBtn = document.getElementById('likeBtn');
-            const likeCountSpan = document.getElementById('likeCount');
-            let currentLikes = parseInt(likeCountSpan.textContent);
-
-            if (!hasLiked) {
-                currentLikes += 1;
-                likeCountSpan.textContent = currentLikes;
-                likeBtn.classList.add('liked');
-                likeBtn.innerHTML = `❤️ <span>${currentLikes}</span> Liked`;
-                hasLiked = true;
+        function shareCenterpiece(title) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: `Tingnan ang kwento ng "${title}" sa Museum of Ordinary Things!`,
+                    url: window.location.href,
+                }).catch((error) => console.log('Error sharing:', error));
             } else {
-                currentLikes -= 1;
-                likeCountSpan.textContent = currentLikes;
-                likeBtn.classList.remove('liked');
-                likeBtn.innerHTML = `❤️ <span>${currentLikes}</span> Likes`;
-                hasLiked = false;
+                alert("Naka-kopya o handa nang ibahagi ang obrang ito!");
             }
-        }
-
-        function playVoiceover() {
-            alert("Nagpe-play ang voiceover mula sa Google Drive storage ng Admin...");
-            // Dito ikokonekta ang Google Drive audio link sa hinaharap
-        }
-
-        function shareSocial(platform) {
-            alert(`Naibahagi na ang artifact sa ${platform}!`);
         }
     </script>
 </body>
