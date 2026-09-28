@@ -190,11 +190,11 @@
 
     <script src="db.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", async function() {
             const displayContainer = document.getElementById("centerpiece-display");
             if (!displayContainer) return;
 
-            const artifacts = getArtifacts();
+            const artifacts = await getArtifacts();
             const approved = artifacts.filter(item => item.status === "Approved" || !item.status);
 
             if (approved.length === 0) {
